@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jojo Studio</title>
+
+    <style>
+        *{
+            margin:0;
+            padding:0;
+            box-sizing:border-box;
+            font-family:Arial, sans-serif;
+        }
+
+        body{
+            background:#0d1117;
+            color:white;
+            overflow-x:hidden;
+        }
+
+        .stars{
+            position:fixed;
+            width:100%;
+            height:100%;
+            top:0;
+            left:0;
+            z-index:-1;
+            background:
+                radial-gradient(2px 2px at 20% 30%, white, transparent),
+                radial-gradient(2px 2px at 80% 20%, white, transparent),
+                radial-gradient(2px 2px at 50% 60%, white, transparent),
+                radial-gradient(2px 2px at 10% 80%, white, transparent),
+                radial-gradient(2px 2px at 90% 70%, white, transparent),
+                radial-gradient(2px 2px at 40% 10%, white, transparent),
+                radial-gradient(2px 2px at 70% 90%, white, transparent);
+            animation: moveStars 20s linear infinite;
+        }
+
+        @keyframes moveStars{
+            from{transform:translateY(0);}
+            to{transform:translateY(-100px);}
+        }
+
+        header{
+            text-align:center;
+            padding:100px 20px;
+        }
+
+        h1{
+            font-size:4rem;
+            color:#58a6ff;
+        }
+
+        .subtitle{
+            font-size:1.2rem;
+            color:#c9d1d9;
+            margin-top:10px;
+        }
+
+        section{
+            max-width:1000px;
+            margin:auto;
+            padding:50px 20px;
+        }
+
+        .card{
+            background:#161b22;
+            border:1px solid #30363d;
+            border-radius:15px;
+            padding:25px;
+            margin-top:20px;
+        }
+
+        h2{
+            color:#58a6ff;
+            margin-bottom:15px;
+        }
+
+        ul{
+            padding-left:20px;
+        }
+
+        li{
+            margin:10px 0;
+        }
+
+        .button{
+            display:inline-block;
+            margin-top:15px;
+            padding:12px 25px;
+            background:#238636;
+            color:white;
+            text-decoration:none;
+            border-radius:10px;
+            transition:0.3s;
+        }
+
+        .button:hover{
+            transform:scale(1.05);
+        }
+
+        footer{
+            text-align:center;
+            padding:40px;
+            color:#8b949e;
+        }
+    </style>
+</head>
+<body>
+
+<div class="stars"></div>
+
+<header>
+    <h1>JOJO STUDIO</h1>
+    <p class="subtitle">Création • Développement • Design • Communication</p>
+</header>
+
+<section>
+    <div class="card">
+        <h2>⭐ Présentation de Jojo Studio</h2>
+        <ul>
+            <li>✏️ Écris ta présentation ici</li>
+            <li>✏️ Écris ta présentation ici</li>
+            <li>✏️ Écris ta présentation ici</li>
+            <li>✏️ Écris ta présentation ici</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>🚀 Nos Services</h2>
+        <ul>
+            <li>Service 1</li>
+            <li>Service 2</li>
+            <li>Service 3</li>
+            <li>Service 4</li>
+            <li>Service 5</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>🛍️ Boutique</h2>
+        <p>Découvrez notre boutique officielle.</p>
+        <a href="https://ton-lien-boutique.com" class="button">
+            Accéder à la boutique
+        </a>
+    </div>
+
+    <div class="card">
+        <h2>🎵 TikTokeurs Partenaires</h2>
+        <ul>
+            <li>Nom TikTokeur 1</li>
+            <li>Nom TikTokeur 2</li>
+            <li>Nom TikTokeur 3</li>
+            <li>Nom TikTokeur 4</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>💬 Discords Partenaires</h2>
+        <ul>
+            <li>Serveur Discord 1</li>
+            <li>Serveur Discord 2</li>
+            <li>Serveur Discord 3</li>
+            <li>Serveur Discord 4</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>📞 Contact</h2>
+        <p>Discord : TonPseudo</p>
+        <p>TikTok : @TonCompte</p>
+        <p>Email : contact@jojostudio.com</p>
+    </div>
+</section>
+
+<footer>
+    © 2026 JOJO STUDIO - Tous droits réservés
+</footer>
+
+</body>
+</html>
