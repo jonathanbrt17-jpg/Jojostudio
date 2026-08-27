@@ -1,177 +1,189 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jojo Studio</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jojo Studio</title>
 
-    <style>
-        *{
-            margin:0;
-            padding:0;
-            box-sizing:border-box;
-            font-family:Arial, sans-serif;
-        }
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
+}
 
-        body{
-            background:#0d1117;
-            color:white;
-            overflow-x:hidden;
-        }
+body{
+    background:#0d1117;
+    color:white;
+    overflow-x:hidden;
+}
 
-        .stars{
-            position:fixed;
-            width:100%;
-            height:100%;
-            top:0;
-            left:0;
-            z-index:-1;
-            background:
-                radial-gradient(2px 2px at 20% 30%, white, transparent),
-                radial-gradient(2px 2px at 80% 20%, white, transparent),
-                radial-gradient(2px 2px at 50% 60%, white, transparent),
-                radial-gradient(2px 2px at 10% 80%, white, transparent),
-                radial-gradient(2px 2px at 90% 70%, white, transparent),
-                radial-gradient(2px 2px at 40% 10%, white, transparent),
-                radial-gradient(2px 2px at 70% 90%, white, transparent);
-            animation: moveStars 20s linear infinite;
-        }
+.stars{
+    position:fixed;
+    width:100%;
+    height:100%;
+    top:0;
+    left:0;
+    z-index:-1;
+    background-image:
+    radial-gradient(2px 2px at 20px 30px,#fff,transparent),
+    radial-gradient(2px 2px at 40px 70px,#fff,transparent),
+    radial-gradient(1px 1px at 90px 40px,#fff,transparent),
+    radial-gradient(2px 2px at 130px 80px,#fff,transparent),
+    radial-gradient(2px 2px at 160px 30px,#fff,transparent);
+    background-size:200px 200px;
+    animation:starsMove 20s linear infinite;
+}
 
-        @keyframes moveStars{
-            from{transform:translateY(0);}
-            to{transform:translateY(-100px);}
-        }
+@keyframes starsMove{
+    from{transform:translateY(0);}
+    to{transform:translateY(-200px);}
+}
 
-        header{
-            text-align:center;
-            padding:100px 20px;
-        }
+header{
+    text-align:center;
+    padding:100px 20px;
+}
 
-        h1{
-            font-size:4rem;
-            color:#58a6ff;
-        }
+h1{
+    font-size:4rem;
+    color:#58a6ff;
+    text-shadow:0 0 20px #58a6ff;
+}
 
-        .subtitle{
-            font-size:1.2rem;
-            color:#c9d1d9;
-            margin-top:10px;
-        }
+.subtitle{
+    color:#c9d1d9;
+    margin-top:10px;
+    font-size:1.2rem;
+}
 
-        section{
-            max-width:1000px;
-            margin:auto;
-            padding:50px 20px;
-        }
+section{
+    max-width:1100px;
+    margin:auto;
+    padding:20px;
+}
 
-        .card{
-            background:#161b22;
-            border:1px solid #30363d;
-            border-radius:15px;
-            padding:25px;
-            margin-top:20px;
-        }
+.card{
+    background:#161b22;
+    border:1px solid #30363d;
+    border-radius:15px;
+    padding:25px;
+    margin-bottom:25px;
+    transition:0.3s;
+}
 
-        h2{
-            color:#58a6ff;
-            margin-bottom:15px;
-        }
+.card:hover{
+    transform:translateY(-5px);
+    box-shadow:0 0 20px rgba(88,166,255,.3);
+}
 
-        ul{
-            padding-left:20px;
-        }
+h2{
+    color:#58a6ff;
+    margin-bottom:15px;
+}
 
-        li{
-            margin:10px 0;
-        }
+ul{
+    padding-left:20px;
+}
 
-        .button{
-            display:inline-block;
-            margin-top:15px;
-            padding:12px 25px;
-            background:#238636;
-            color:white;
-            text-decoration:none;
-            border-radius:10px;
-            transition:0.3s;
-        }
+li{
+    margin:10px 0;
+}
 
-        .button:hover{
-            transform:scale(1.05);
-        }
+.button{
+    display:inline-block;
+    margin-top:15px;
+    padding:15px 30px;
+    background:linear-gradient(45deg,#58a6ff,#7c3aed);
+    color:white;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
+    box-shadow:0 0 20px rgba(88,166,255,.5);
+    transition:.3s;
+}
 
-        footer{
-            text-align:center;
-            padding:40px;
-            color:#8b949e;
-        }
-    </style>
+.button:hover{
+    transform:scale(1.05);
+}
+
+footer{
+    text-align:center;
+    padding:40px;
+    color:#8b949e;
+}
+</style>
 </head>
+
 <body>
 
 <div class="stars"></div>
 
 <header>
     <h1>JOJO STUDIO</h1>
-    <p class="subtitle">Création • Développement • Design • Communication</p>
+    <p class="subtitle">Création • Design • Développement • Communication</p>
 </header>
 
 <section>
-    <div class="card">
-        <h2>⭐ Présentation de Jojo Studio</h2>
-        <ul>
-            <li>✏️ Écris ta présentation ici</li>
-            <li>✏️ Écris ta présentation ici</li>
-            <li>✏️ Écris ta présentation ici</li>
-            <li>✏️ Écris ta présentation ici</li>
-        </ul>
-    </div>
 
-    <div class="card">
-        <h2>🚀 Nos Services</h2>
-        <ul>
-            <li>Service 1</li>
-            <li>Service 2</li>
-            <li>Service 3</li>
-            <li>Service 4</li>
-            <li>Service 5</li>
-        </ul>
-    </div>
+<div class="card">
+    <h2>⭐ Présentation de Jojo Studio</h2>
+    <ul>
+        <li>✏️ Écris ta présentation ici</li>
+        <li>✏️ Écris ta présentation ici</li>
+        <li>✏️ Écris ta présentation ici</li>
+        <li>✏️ Écris ta présentation ici</li>
+    </ul>
+</div>
 
-    <div class="card">
-        <h2>🛍️ Boutique</h2>
-        <p> https://jojostudio.sumupstore.com/ </p>
-        <a href="https://ton-lien-boutique.com" class="button">
-            Accéder à la boutique
-        </a>
-    </div>
+<div class="card">
+    <h2>🚀 Nos Services</h2>
+    <ul>
+        <li>🔹 Service 1</li>
+        <li>🔹 Service 2</li>
+        <li>🔹 Service 3</li>
+        <li>🔹 Service 4</li>
+        <li>🔹 Service 5</li>
+    </ul>
+</div>
 
-    <div class="card">
-        <h2>🎵 TikTokeurs Partenaires</h2>
-        <ul>
-            <li>Nom TikTokeur 1</li>
-            <li>Nom TikTokeur 2</li>
-            <li>Nom TikTokeur 3</li>
-            <li>Nom TikTokeur 4</li>
-        </ul>
-    </div>
+<div class="card">
+    <h2>🛍️ Boutique Officielle</h2>
+    <p>Découvrez tous nos produits et services.</p>
 
-    <div class="card">
-        <h2>💬 Discords Partenaires</h2>
-        <ul>
-            <li>Serveur Discord 1</li>
-            <li>Serveur Discord 2</li>
-            <li>Serveur Discord 3</li>
-            <li>Serveur Discord 4</li>
-        </ul>
-    </div>
+    <a href="https://jojostudio.sumupstore.com/" target="_blank" class="button">
+        Accéder à la Boutique
+    </a>
+</div>
 
-    <div class="card">
-        <h2>📞 Contact</h2>
-        <p>Discord : TonPseudo</p>
-        <p>TikTok : @TonCompte</p>
-        <p>Email : contact@jojostudio.com</p>
-    </div>
+<div class="card">
+    <h2>🎵 TikTokeurs Partenaires</h2>
+    <ul>
+        <li>Nom TikTokeur 1</li>
+        <li>Nom TikTokeur 2</li>
+        <li>Nom TikTokeur 3</li>
+        <li>Nom TikTokeur 4</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2>💬 Discords Partenaires</h2>
+    <ul>
+        <li>Serveur Discord 1</li>
+        <li>Serveur Discord 2</li>
+        <li>Serveur Discord 3</li>
+        <li>Serveur Discord 4</li>
+    </ul>
+</div>
+
+<div class="card">
+    <h2>📞 Contact</h2>
+    <p>Discord : TonDiscord</p>
+    <p>TikTok : @TonTikTok</p>
+    <p>Email : tonemail@example.com</p>
+</div>
+
 </section>
 
 <footer>
