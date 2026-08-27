@@ -10,7 +10,7 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:Arial, sans-serif;
 }
 
 body{
@@ -21,18 +21,18 @@ body{
 
 .stars{
     position:fixed;
-    width:100%;
-    height:100%;
     top:0;
     left:0;
+    width:100%;
+    height:100%;
     z-index:-1;
     background-image:
     radial-gradient(2px 2px at 20px 30px,#fff,transparent),
-    radial-gradient(2px 2px at 40px 70px,#fff,transparent),
-    radial-gradient(1px 1px at 90px 40px,#fff,transparent),
-    radial-gradient(2px 2px at 130px 80px,#fff,transparent),
-    radial-gradient(2px 2px at 160px 30px,#fff,transparent);
-    background-size:200px 200px;
+    radial-gradient(2px 2px at 100px 80px,#fff,transparent),
+    radial-gradient(2px 2px at 180px 40px,#fff,transparent),
+    radial-gradient(2px 2px at 250px 120px,#fff,transparent),
+    radial-gradient(2px 2px at 320px 60px,#fff,transparent);
+    background-size:400px 400px;
     animation:starsMove 20s linear infinite;
 }
 
@@ -59,7 +59,7 @@ h1{
 }
 
 section{
-    max-width:1100px;
+    max-width:1000px;
     margin:auto;
     padding:20px;
 }
@@ -70,7 +70,7 @@ section{
     border-radius:15px;
     padding:25px;
     margin-bottom:25px;
-    transition:0.3s;
+    transition:.3s;
 }
 
 .card:hover{
@@ -100,8 +100,8 @@ li{
     text-decoration:none;
     border-radius:12px;
     font-weight:bold;
-    box-shadow:0 0 20px rgba(88,166,255,.5);
     transition:.3s;
+    box-shadow:0 0 20px rgba(88,166,255,.5);
 }
 
 .button:hover{
@@ -150,10 +150,22 @@ footer{
 
 <div class="card">
     <h2>🛍️ Boutique Officielle</h2>
-    <p>Découvrez tous nos produits et services.</p>
 
-    <a href="https://jojostudio.sumupstore.com/" target="_blank" class="button">
-        Accéder à la Boutique
+    <p>Découvrez nos produits et services.</p>
+
+    <a href="https://jojostudio.sumupstore.com/"
+       target="_blank"
+       rel="noopener noreferrer"
+       class="button">
+       🛒 Accéder à la Boutique
+    </a>
+
+    <br><br>
+
+    <p>Si le bouton ne fonctionne pas :</p>
+
+    <a href="https://jojostudio.sumupstore.com/" target="_blank">
+        https://jojostudio.sumupstore.com/
     </a>
 </div>
 
