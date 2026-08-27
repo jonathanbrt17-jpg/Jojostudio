@@ -117,7 +117,53 @@ Créativité, professionnalisme et proximité sont au cœur de notre approche. N
 <div class="card">
     <h2>🚀 Nos Services</h2>
     <ul>
-        <li>🔹 Service 1</li>
+        <li>🔹 <div class="card">
+    <h2>📈 Nombre d'abonnés TikTok</h2>
+
+    <div style="text-align:center;">
+        <p id="followers"
+           style="font-size:3rem;font-weight:bold;color:#58a6ff;text-shadow:0 0 15px #58a6ff;">
+           0 abonnés
+        </p>
+
+        <p style="color:#c9d1d9;font-size:1.2rem;">
+            @jojolecrivain
+        </p>
+
+        <a href="https://www.tiktok.com/@jojolecrivain"
+           target="_blank"
+           rel="noopener noreferrer"
+           class="button">
+           🎵 Voir mon TikTok
+        </a>
+    </div>
+</div>
+
+<script>
+(function() {
+    let followers = 0;
+    const targetFollowers = 104600;
+    const followerElement = document.getElementById("followers");
+
+    const animation = setInterval(() => {
+        followers += Math.ceil((targetFollowers - followers) / 15);
+
+        if (followers >= targetFollowers) {
+            followers = targetFollowers;
+            clearInterval(animation);
+
+            setInterval(() => {
+                followers++;
+                followerElement.textContent =
+                    followers.toLocaleString("fr-FR") + " abonnés";
+            }, 3000);
+        }
+
+        followerElement.textContent =
+            followers.toLocaleString("fr-FR") + " abonnés";
+    }, 50);
+})();
+</script></li>
         <li>🔹 Service 2</li>
         <li>🔹 Service 3</li>
         <li>🔹 Service 4</li>
