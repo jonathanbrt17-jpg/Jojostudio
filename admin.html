@@ -3,94 +3,547 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#080611">
 <title>Jojo Studio Live | Administration</title>
+
 <style>
-*{box-sizing:border-box}
-body{margin:0;background:#080611;color:white;font-family:Arial,sans-serif}
-header{padding:20px;background:#110b1c;border-bottom:1px solid #40245b}
-header strong{font-size:22px}header span{color:#a855f7}
-main{max-width:1100px;margin:auto;padding:25px}
-.panel{background:#151020;border:1px solid #38234c;border-radius:14px;padding:22px;margin-bottom:22px}
-h2{color:#d8b4fe;margin-top:0}
-input,select{width:100%;padding:13px;margin:8px 0 17px;background:#090712;color:white;border:1px solid #49335d;border-radius:8px}
-label{font-size:14px;color:#ddd}
-button{padding:13px 18px;background:#9333ea;border:0;border-radius:8px;color:white;font-weight:bold;cursor:pointer}
-button:hover{background:#a855f7}
-.logout{background:#43254f}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:22px}
-.stat{background:#211630;padding:20px;border-radius:12px;border:1px solid #38234c}
-.stat strong{display:block;font-size:28px;color:#c084fc}
-.stat small{color:#bbb}
-table{width:100%;border-collapse:collapse}
-th,td{text-align:left;padding:12px;border-bottom:1px solid #38234c;font-size:14px}
-th{color:#c084fc}
-.table-wrap{overflow-x:auto}
-#dashboard{display:none}
-#message{margin:12px 0;color:#d8b4fe}
-#login{max-width:440px;margin:70px auto;padding:25px}
-.empty{color:#aaa}
-@media(max-width:600px){main{padding:14px}.panel{padding:16px}th,td{padding:9px}}
-  
-.admin-button {
-  display: inline-block;
-  padding: 14px 20px;
-  background: #9333ea;
-  color: white;
-  text-decoration: none;
-  border-radius: 10px;
-  font-weight: bold;
-  transition: 0.3s;
+:root {
+  --bg: #080611;
+  --surface: #120d1d;
+  --surface2: #1b1428;
+  --border: #30213f;
+  --purple: #9333ea;
+  --purple-light: #c084fc;
+  --text: #ffffff;
+  --muted: #aaa1b5;
+  --green: #4ade80;
 }
 
-.admin-button:hover {
-  background: #a855f7;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(ellipse at top right, #28113e 0%, transparent 38%),
+    var(--bg);
+  color: var(--text);
+  font-family: Arial, sans-serif;
+  min-height: 100vh;
+}
+
+button, input, select {
+  font: inherit;
+}
+
+/* HEADER */
+
+header {
+  min-height: 76px;
+  padding: 15px 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  background: rgba(17, 11, 28, .95);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+}
+
+.logo {
+  font-size: 21px;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.logo span {
+  color: var(--purple-light);
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-label {
+  color: var(--purple-light);
+  font-size: 12px;
+  border: 1px solid #69339a;
+  padding: 7px 11px;
+  border-radius: 20px;
+}
+
+/* BOUTONS */
+
+button, .admin-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 18px;
+  border: 0;
+  border-radius: 9px;
+  background: linear-gradient(135deg, #9333ea, #7024b7);
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s ease;
+}
+
+button:hover, .admin-button:hover {
+  background: linear-gradient(135deg, #a855f7, #8534cf);
+  transform: translateY(-2px);
+  box-shadow: 0 7px 20px #9333ea33;
+}
+
+.logout {
+  background: #35213f;
+  border: 1px solid #69417d;
+}
+
+.logout:hover {
+  background: #51305f;
+}
+
+/* STRUCTURE */
+
+main {
+  max-width: 1150px;
+  margin: auto;
+  padding: 35px 22px 60px;
+}
+
+.page-heading {
+  margin-bottom: 28px;
+}
+
+.page-heading h1 {
+  font-size: 30px;
+  margin: 0 0 9px;
+}
+
+.page-heading p {
+  color: var(--muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.eyebrow {
+  color: var(--purple-light);
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* PANELS */
+
+.panel {
+  background: linear-gradient(145deg, #171021, #100b19);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 24px;
+  margin-bottom: 22px;
+  box-shadow: 0 12px 35px #00000020;
+}
+
+.panel h2 {
+  color: #e5caff;
+  font-size: 19px;
+  margin: 0 0 18px;
+}
+
+.panel-description {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+  margin-top: -8px;
+  margin-bottom: 20px;
+}
+
+/* STATISTIQUES */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 17px;
+  margin-bottom: 25px;
+}
+
+.stat {
+  background: linear-gradient(145deg, #211630, #171020);
+  border: 1px solid #43295b;
+  border-radius: 14px;
+  padding: 22px;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat::after {
+  content: "";
+  position: absolute;
+  width: 90px;
+  height: 90px;
+  background: #9333ea18;
+  border-radius: 50%;
+  right: -30px;
+  top: -30px;
+}
+
+.stat strong {
+  display: block;
+  font-size: 32px;
+  color: var(--purple-light);
+  margin-bottom: 7px;
+}
+
+.stat small {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* NAVIGATION */
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  margin-bottom: 27px;
+}
+
+.action-card {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 19px;
+  border-radius: 13px;
+  background: #171020;
+  border: 1px solid var(--border);
+  color: white;
+  text-decoration: none;
+  transition: .2s ease;
+}
+
+.action-card:hover {
+  border-color: var(--purple);
+  background: #21152f;
   transform: translateY(-2px);
 }
 
+.action-icon {
+  width: 45px;
+  height: 45px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: #9333ea25;
+  font-size: 22px;
+}
+
+.action-card strong {
+  display: block;
+  margin-bottom: 5px;
+}
+
+.action-card small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+/* FORMULAIRES */
+
+label {
+  display: block;
+  font-size: 13px;
+  color: #d9cce5;
+  margin: 12px 0 7px;
+}
+
+input, select {
+  width: 100%;
+  padding: 14px;
+  background: #090712;
+  color: white;
+  border: 1px solid #49335d;
+  border-radius: 9px;
+  outline: none;
+  transition: .2s;
+}
+
+input:focus, select:focus {
+  border-color: var(--purple-light);
+  box-shadow: 0 0 0 3px #9333ea22;
+}
+
+input::placeholder {
+  color: #766b80;
+}
+
+select option {
+  background: #151020;
+}
+
+/* TABLEAU */
+
+.table-wrap {
+  overflow-x: auto;
+  border-radius: 10px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 550px;
+}
+
+th, td {
+  text-align: left;
+  padding: 15px 13px;
+  border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+
+th {
+  color: var(--purple-light);
+  background: #211630;
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+
+td {
+  color: #ded7e7;
+}
+
+tbody tr:hover {
+  background: #ffffff08;
+}
+
+tbody tr:last-child td {
+  border-bottom: 0;
+}
+
+/* MESSAGES */
+
+#message, #loginMessage, #memberMessage {
+  margin-top: 15px;
+  color: var(--purple-light);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.empty {
+  color: var(--muted);
+}
+
+/* CONNEXION */
+
+#login {
+  max-width: 440px;
+  margin: 85px auto;
+  padding: 30px;
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.login-logo .logo {
+  font-size: 25px;
+}
+
+.login-logo p {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+#login button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+#dashboard {
+  display: none;
+}
+
+/* PIED DE PAGE */
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #746b7e;
+  font-size: 12px;
+  border-top: 1px solid var(--border);
+}
+
+/* MOBILE */
+
+@media(max-width: 700px) {
+  header {
+    padding: 14px 16px;
+  }
+
+  .logo {
+    font-size: 17px;
+  }
+
+  .admin-label {
+    display: none;
+  }
+
+  main {
+    padding: 25px 14px 45px;
+  }
+
+  .page-heading h1 {
+    font-size: 25px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+    gap: 11px;
+  }
+
+  .stat {
+    padding: 17px;
+  }
+
+  .stat strong {
+    font-size: 27px;
+  }
+
+  .quick-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .panel {
+    padding: 18px;
+  }
+
+  #login {
+    margin: 55px 14px;
+    padding: 23px;
+  }
+
+  .logout {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
 </style>
 </head>
+
 <body>
 
 <header>
-  <strong>JOJO <span>STUDIO LIVE</span></strong>
-  <button id="logoutButton" class="logout" style="float:right;display:none">Déconnexion</button>
+  <div class="logo">JOJO <span>STUDIO LIVE</span></div>
+
+  <div class="header-right">
+    <span class="admin-label">ESPACE FONDATEUR</span>
+    <button id="logoutButton" class="logout"
+      style="display:none">Déconnexion</button>
+  </div>
 </header>
 
+<!-- CONNEXION -->
+
 <div id="login" class="panel">
+
+  <div class="login-logo">
+    <div class="logo">JOJO <span style="color:#c084fc">STUDIO LIVE</span></div>
+    <p>Administration sécurisée de l'agence</p>
+  </div>
+
   <h2>Connexion Fondateur</h2>
+
   <form id="loginForm">
     <label for="email">Adresse e-mail</label>
-    <input id="email" type="email" required>
+    <input id="email" type="email" placeholder="Ton adresse e-mail" required>
+
     <label for="password">Mot de passe</label>
-    <input id="password" type="password" required>
-    <button type="submit">Se connecter</button>
+    <input id="password" type="password" placeholder="Ton mot de passe" required>
+
+    <button type="submit">Se connecter →</button>
   </form>
+
   <div id="loginMessage"></div>
 </div>
 
-<main id="dashboard">
-  <h1>Tableau de bord</h1>
-  <p id="welcome" style="color:#bbb"></p>
+<!-- TABLEAU DE BORD -->
 
-  <div class="cards">
-    <div class="stat"><strong id="totalMembers">0</strong><small>Membres</small></div>
-    <div class="stat"><strong id="totalCreators">0</strong><small>Créateurs</small></div>
-    <div class="stat"><strong id="totalStaff">0</strong><small>Équipe interne</small></div>
+<main id="dashboard">
+
+  <div class="page-heading">
+    <div class="eyebrow">Espace de gestion</div>
+    <h1>Tableau de bord</h1>
+    <p id="welcome">Bienvenue dans ton espace d'administration.</p>
   </div>
 
-<a href="gestion-stats.html" class="admin-button">
-  📊 Gestion des statistiques
-</a>
+  <!-- STATISTIQUES -->
+
+  <div class="cards">
+
+    <div class="stat">
+      <strong id="totalMembers">0</strong>
+      <small>Membres de l'agence</small>
+    </div>
+
+    <div class="stat">
+      <strong id="totalCreators">0</strong>
+      <small>Créateurs TikTok</small>
+    </div>
+
+    <div class="stat">
+      <strong id="totalStaff">0</strong>
+      <small>Équipe interne</small>
+    </div>
+
+  </div>
+
+  <!-- ACCÈS RAPIDES -->
+
+  <div class="quick-actions">
+
+    <a href="gestion-stats.html" class="action-card">
+      <div class="action-icon">📊</div>
+      <div>
+        <strong>Gestion des statistiques</strong>
+        <small>Suivre les performances des créateurs</small>
+      </div>
+    </a>
+
+    <a href="createur.html" class="action-card">
+      <div class="action-icon">👤</div>
+      <div>
+        <strong>Espace créateur</strong>
+        <small>Accéder à l'espace des créateurs</small>
+      </div>
+    </a>
+
+  </div>
+
+  <!-- AJOUT MEMBRE -->
 
   <section class="panel">
-    <h2>Ajouter un membre</h2>
-    <p style="color:#aaa;font-size:14px">
+
+    <h2>＋ Ajouter un membre</h2>
+
+    <p class="panel-description">
       Crée d'abord son compte dans Firebase Authentication,
-      puis renseigne son UID ici.
+      puis renseigne son UID pour enregistrer son profil dans l'agence.
     </p>
 
     <form id="memberForm">
+
       <label for="memberName">Nom et prénom</label>
       <input id="memberName" required placeholder="Nom du membre">
 
@@ -98,7 +551,7 @@ th{color:#c084fc}
       <input id="memberEmail" type="email" required placeholder="membre@email.fr">
 
       <label for="memberUid">UID Firebase Authentication</label>
-      <input id="memberUid" required placeholder="UID du compte">
+      <input id="memberUid" required placeholder="UID du compte Firebase">
 
       <label for="memberRole">Rôle dans l'agence</label>
       <select id="memberRole" required>
@@ -108,37 +561,71 @@ th{color:#c084fc}
         <option value="responsable">Responsable</option>
       </select>
 
-      <button type="submit">Ajouter le membre</button>
+      <button type="submit">Enregistrer le membre</button>
+
     </form>
+
     <div id="memberMessage"></div>
+
   </section>
 
+  <!-- ÉQUIPE -->
+
   <section class="panel">
-    <h2>Mon équipe</h2>
+
+    <h2>Notre équipe</h2>
+
+    <p class="panel-description">
+      Retrouvez ici les membres enregistrés dans Jojo Studio Live.
+    </p>
+
     <div class="table-wrap">
       <table>
         <thead>
-          <tr><th>Nom</th><th>E-mail</th><th>Rôle</th><th>UID</th></tr>
+          <tr>
+            <th>Nom</th>
+            <th>E-mail</th>
+            <th>Rôle</th>
+            <th>UID Firebase</th>
+          </tr>
         </thead>
+
         <tbody id="membersList">
-          <tr><td colspan="4">Chargement...</td></tr>
+          <tr>
+            <td colspan="4">Chargement des membres...</td>
+          </tr>
         </tbody>
       </table>
     </div>
+
   </section>
+
 </main>
 
+<footer>
+  JOJO STUDIO LIVE © 2026 — Espace d'administration
+</footer>
+
 <script type="module">
+
 import { initializeApp } from
 "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
 import {
-  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
+  getAuth,
+  signInWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 import {
-  getFirestore, doc, getDoc, setDoc, getDocs,
-  collection, serverTimestamp
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  getDocs,
+  collection,
+  serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -160,128 +647,188 @@ const login = document.getElementById("login");
 const dashboard = document.getElementById("dashboard");
 const logoutButton = document.getElementById("logoutButton");
 
-function showMessage(id,text){
-  document.getElementById(id).textContent=text;
+function showMessage(id, text) {
+  document.getElementById(id).textContent = text;
 }
 
-async function loadMembers(){
-  const snapshot = await getDocs(collection(db,"users"));
+async function loadMembers() {
+
+  const snapshot = await getDocs(collection(db, "users"));
   const list = document.getElementById("membersList");
+
   list.replaceChildren();
 
-  let creators=0,staff=0;
+  let creators = 0;
+  let staff = 0;
 
-  snapshot.forEach(item=>{
-    const member=item.data();
-    if(member.role==="createur") creators++;
+  snapshot.forEach(item => {
+
+    const member = item.data();
+
+    if (member.role === "createur") creators++;
     else staff++;
 
-    const tr=document.createElement("tr");
-    [member.name||"Sans nom",member.email||"",member.role||"",item.id]
-      .forEach(value=>{
-        const td=document.createElement("td");
-        td.textContent=value;
-        tr.appendChild(td);
-      });
+    const tr = document.createElement("tr");
+
+    [
+      member.name || "Sans nom",
+      member.email || "",
+      member.role || "",
+      item.id
+    ].forEach(value => {
+
+      const td = document.createElement("td");
+      td.textContent = value;
+      tr.appendChild(td);
+
+    });
+
     list.appendChild(tr);
+
   });
 
-  if(snapshot.empty){
-    const tr=document.createElement("tr");
-    const td=document.createElement("td");
-    td.colSpan=4;
-    td.textContent="Aucun membre enregistré.";
+  if (snapshot.empty) {
+
+    const tr = document.createElement("tr");
+    const td = document.createElement("td");
+
+    td.colSpan = 4;
+    td.textContent = "Aucun membre enregistré.";
+
     tr.appendChild(td);
     list.appendChild(tr);
+
   }
 
-  document.getElementById("totalMembers").textContent=snapshot.size;
-  document.getElementById("totalCreators").textContent=creators;
-  document.getElementById("totalStaff").textContent=staff;
+  document.getElementById("totalMembers").textContent = snapshot.size;
+  document.getElementById("totalCreators").textContent = creators;
+  document.getElementById("totalStaff").textContent = staff;
+
 }
 
-onAuthStateChanged(auth,async user=>{
-  if(!user){
-    login.style.display="block";
-    dashboard.style.display="none";
-    logoutButton.style.display="none";
+onAuthStateChanged(auth, async user => {
+
+  if (!user) {
+
+    login.style.display = "block";
+    dashboard.style.display = "none";
+    logoutButton.style.display = "none";
     return;
+
   }
 
-  try{
-    const profile=await getDoc(doc(db,"users",user.uid));
-    if(!profile.exists()||profile.data().role!=="fondateur"){
+  try {
+
+    const profile = await getDoc(doc(db, "users", user.uid));
+
+    if (!profile.exists() || profile.data().role !== "fondateur") {
+
       await signOut(auth);
-      showMessage("loginMessage","Accès réservé au Fondateur.");
+      showMessage("loginMessage", "Accès réservé au Fondateur.");
       return;
+
     }
 
-    login.style.display="none";
-    dashboard.style.display="block";
-    logoutButton.style.display="inline-block";
-    document.getElementById("welcome").textContent=
-      "Bienvenue, "+(profile.data().name||user.email);
+    login.style.display = "none";
+    dashboard.style.display = "block";
+    logoutButton.style.display = "inline-flex";
+
+    document.getElementById("welcome").textContent =
+      "Bienvenue, " + (profile.data().name || user.email) +
+      ". Voici l'activité de ton agence.";
 
     await loadMembers();
-  }catch(error){
-    showMessage("loginMessage","Erreur : "+error.message);
+
+  } catch (error) {
+
+    showMessage("loginMessage", "Erreur : " + error.message);
+
   }
+
 });
 
-document.getElementById("loginForm").addEventListener("submit",async e=>{
+document.getElementById("loginForm").addEventListener("submit", async e => {
+
   e.preventDefault();
-  showMessage("loginMessage","Connexion...");
-  try{
+
+  showMessage("loginMessage", "Connexion en cours...");
+
+  try {
+
     await signInWithEmailAndPassword(
       auth,
       document.getElementById("email").value.trim(),
       document.getElementById("password").value
     );
-  }catch(error){
-    showMessage("loginMessage","Connexion impossible : "+error.message);
+
+  } catch (error) {
+
+    showMessage("loginMessage", "Connexion impossible : " + error.message);
+
   }
+
 });
 
-logoutButton.addEventListener("click",()=>signOut(auth));
+logoutButton.addEventListener("click", () => signOut(auth));
 
-document.getElementById("memberForm").addEventListener("submit",async e=>{
+document.getElementById("memberForm").addEventListener("submit", async e => {
+
   e.preventDefault();
-  showMessage("memberMessage","Enregistrement...");
 
-  const user=auth.currentUser;
-  if(!user){
-    showMessage("memberMessage","Tu dois être connecté.");
+  showMessage("memberMessage", "Enregistrement en cours...");
+
+  const user = auth.currentUser;
+
+  if (!user) {
+    showMessage("memberMessage", "Tu dois être connecté.");
     return;
   }
 
-  try{
-    const founder=await getDoc(doc(db,"users",user.uid));
-    if(!founder.exists()||founder.data().role!=="fondateur"){
+  try {
+
+    const founder = await getDoc(doc(db, "users", user.uid));
+
+    if (!founder.exists() || founder.data().role !== "fondateur") {
       throw new Error("Autorisation refusée.");
     }
 
-    const uid=document.getElementById("memberUid").value.trim();
-    const name=document.getElementById("memberName").value.trim();
-    const email=document.getElementById("memberEmail").value.trim();
-    const role=document.getElementById("memberRole").value;
+    const uid = document.getElementById("memberUid").value.trim();
+    const name = document.getElementById("memberName").value.trim();
+    const email = document.getElementById("memberEmail").value.trim();
+    const role = document.getElementById("memberRole").value;
 
-    if(uid===user.uid) throw new Error("Tu ne peux pas remplacer ton propre profil.");
+    if (uid === user.uid) {
+      throw new Error("Tu ne peux pas remplacer ton propre profil.");
+    }
 
-    const existing=await getDoc(doc(db,"users",uid));
-    if(existing.exists()) throw new Error("Un profil existe déjà pour cet UID.");
+    const existing = await getDoc(doc(db, "users", uid));
 
-    await setDoc(doc(db,"users",uid),{
-      name,email,role,createdAt:serverTimestamp()
+    if (existing.exists()) {
+      throw new Error("Un profil existe déjà pour cet UID.");
+    }
+
+    await setDoc(doc(db, "users", uid), {
+      name,
+      email,
+      role,
+      createdAt: serverTimestamp()
     });
 
     document.getElementById("memberForm").reset();
-    showMessage("memberMessage","Membre ajouté avec succès !");
+
+    showMessage("memberMessage", "Membre ajouté avec succès !");
+
     await loadMembers();
 
-  }catch(error){
-    showMessage("memberMessage","Erreur : "+error.message);
+  } catch (error) {
+
+    showMessage("memberMessage", "Erreur : " + error.message);
+
   }
+
 });
+
 </script>
+
 </body>
 </html>
