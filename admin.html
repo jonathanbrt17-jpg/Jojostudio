@@ -1,1 +1,177 @@
 
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jojo Studio Live | Administration</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;background:#080611;color:white;
+  font-family:Arial,sans-serif;min-height:100vh;
+  display:flex;align-items:center;justify-content:center;padding:20px
+}
+.panel{
+  width:100%;max-width:440px;background:#151020;
+  border:1px solid #6935a0;border-radius:18px;
+  padding:30px;box-shadow:0 0 35px #8b35c544
+}
+.logo{text-align:center;font-size:25px;font-weight:bold;margin-bottom:8px}
+.logo span{color:#a855f7}
+.subtitle{text-align:center;color:#aaa;margin-bottom:28px}
+label{display:block;margin:15px 0 7px;color:#ddd}
+input{
+  width:100%;padding:14px;background:#090712;
+  border:1px solid #49335d;border-radius:8px;
+  color:white;font-size:15px
+}
+button{
+  width:100%;padding:14px;margin-top:20px;
+  background:#9333ea;border:0;border-radius:8px;
+  color:white;font-weight:bold;font-size:16px;cursor:pointer
+}
+button:hover{background:#a855f7}
+#message{margin-top:18px;text-align:center;color:#d8b4fe;font-size:14px}
+#dashboard{display:none}
+.info{background:#211630;padding:18px;border-radius:10px;margin-top:20px}
+.logout{background:#3b263f}
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="logo">JOJO <span>STUDIO LIVE</span></div>
+  <div class="subtitle">Espace sécurisé de l'agence</div>
+
+  <div id="login">
+    <h2>Connexion</h2>
+    <form id="loginForm">
+      <label for="email">Adresse e-mail</label>
+      <input id="email" type="email" required autocomplete="username"
+             placeholder="Ton adresse e-mail">
+
+      <label for="password">Mot de passe</label>
+      <input id="password" type="password" required
+             autocomplete="current-password" placeholder="Ton mot de passe">
+
+      <button type="submit">Se connecter</button>
+    </form>
+  </div>
+
+  <div id="dashboard">
+    <h2>Bienvenue dans ton espace</h2>
+    <div class="info">
+      <p>Nom : <strong id="userName"></strong></p>
+      <p>Rôle : <strong id="userRole"></strong></p>
+      <p id="userEmail"></p>
+    </div>
+    <p id="roleInfo"></p>
+    <button class="logout" id="logoutButton">Déconnexion</button>
+  </div>
+
+  <div id="message"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+  getAuth, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+  getFirestore, doc, getDoc
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAXtgoUM86NRVQQSQrQC9VNH22EXiKoDPo",
+  authDomain: "jojo-studio-live-7ac91.firebaseapp.com",
+  databaseURL: "https://jojo-studio-live-7ac91-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "jojo-studio-live-7ac91",
+  storageBucket: "jojo-studio-live-7ac91.firebasestorage.app",
+  messagingSenderId: "881225433382",
+  appId: "1:881225433382:web:112ccc2dceece58c8641e7",
+  measurementId: "G-2XH20R9VBS"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const login = document.getElementById("login");
+const dashboard = document.getElementById("dashboard");
+const message = document.getElementById("message");
+
+const allowedRoles = [
+  "fondateur", "responsable", "recruteur",
+  "moderateur", "createur"
+];
+
+function showDashboard(user, profile) {
+  login.style.display = "none";
+  dashboard.style.display = "block";
+  document.getElementById("userName").textContent =
+    profile.name || "Membre Jojo Studio Live";
+  document.getElementById("userRole").textContent =
+    profile.role;
+  document.getElementById("userEmail").textContent =
+    user.email || "";
+  document.getElementById("roleInfo").textContent =
+    profile.role === "fondateur"
+      ? "Accès Fondateur reconnu. Le tableau de bord sera développé dans la prochaine étape."
+      : "Accès reconnu. Ton espace personnel sera développé prochainement.";
+}
+
+document.getElementById("loginForm").addEventListener("submit",
+async (event) => {
+  event.preventDefault();
+  message.textContent = "Connexion en cours...";
+
+  try {
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const result = await signInWithEmailAndPassword(
+      auth, email, password
+    );
+
+    const profileRef = doc(db, "users", result.user.uid);
+    const profileSnap = await getDoc(profileRef);
+
+    if (!profileSnap.exists()) {
+      await signOut(auth);
+      throw new Error("Aucun profil d'agence n'est associé à ce compte.");
+    }
+
+    const profile = profileSnap.data();
+
+    if (!allowedRoles.includes(profile.role)) {
+      await signOut(auth);
+      throw new Error("Rôle non autorisé.");
+    }
+
+    message.textContent = "";
+    showDashboard(result.user, profile);
+
+  } catch (error) {
+    message.textContent =
+      error.code === "auth/invalid-credential"
+        ? "Adresse e-mail ou mot de passe incorrect."
+        : error.message;
+  }
+});
+
+document.getElementById("logoutButton").addEventListener("click",
+async () => {
+  await signOut(auth);
+  dashboard.style.display = "none";
+  login.style.display = "block";
+  document.getElementById("password").value = "";
+  message.textContent = "Déconnexion effectuée.";
+});
+</script>
+</body>
+</html>
+
