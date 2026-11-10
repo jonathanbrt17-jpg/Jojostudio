@@ -3,86 +3,121 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Jojo Studio Live | Administration</title>
 <style>
 *{box-sizing:border-box}
-body{
-  margin:0;background:#080611;color:white;
-  font-family:Arial,sans-serif;min-height:100vh;
-  display:flex;align-items:center;justify-content:center;padding:20px
-}
-.panel{
-  width:100%;max-width:440px;background:#151020;
-  border:1px solid #6935a0;border-radius:18px;
-  padding:30px;box-shadow:0 0 35px #8b35c544
-}
-.logo{text-align:center;font-size:25px;font-weight:bold;margin-bottom:8px}
-.logo span{color:#a855f7}
-.subtitle{text-align:center;color:#aaa;margin-bottom:28px}
-label{display:block;margin:15px 0 7px;color:#ddd}
-input{
-  width:100%;padding:14px;background:#090712;
-  border:1px solid #49335d;border-radius:8px;
-  color:white;font-size:15px
-}
-button{
-  width:100%;padding:14px;margin-top:20px;
-  background:#9333ea;border:0;border-radius:8px;
-  color:white;font-weight:bold;font-size:16px;cursor:pointer
-}
+body{margin:0;background:#080611;color:white;font-family:Arial,sans-serif}
+header{padding:20px;background:#110b1c;border-bottom:1px solid #40245b}
+header strong{font-size:22px}header span{color:#a855f7}
+main{max-width:1100px;margin:auto;padding:25px}
+.panel{background:#151020;border:1px solid #38234c;border-radius:14px;padding:22px;margin-bottom:22px}
+h2{color:#d8b4fe;margin-top:0}
+input,select{width:100%;padding:13px;margin:8px 0 17px;background:#090712;color:white;border:1px solid #49335d;border-radius:8px}
+label{font-size:14px;color:#ddd}
+button{padding:13px 18px;background:#9333ea;border:0;border-radius:8px;color:white;font-weight:bold;cursor:pointer}
 button:hover{background:#a855f7}
-#message{margin-top:18px;text-align:center;color:#d8b4fe;font-size:14px}
+.logout{background:#43254f}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:15px;margin-bottom:22px}
+.stat{background:#211630;padding:20px;border-radius:12px;border:1px solid #38234c}
+.stat strong{display:block;font-size:28px;color:#c084fc}
+.stat small{color:#bbb}
+table{width:100%;border-collapse:collapse}
+th,td{text-align:left;padding:12px;border-bottom:1px solid #38234c;font-size:14px}
+th{color:#c084fc}
+.table-wrap{overflow-x:auto}
 #dashboard{display:none}
-.info{background:#211630;padding:18px;border-radius:10px;margin-top:20px}
-.logout{background:#3b263f}
+#message{margin:12px 0;color:#d8b4fe}
+#login{max-width:440px;margin:70px auto;padding:25px}
+.empty{color:#aaa}
+@media(max-width:600px){main{padding:14px}.panel{padding:16px}th,td{padding:9px}}
 </style>
 </head>
 <body>
 
-<div class="panel">
-  <div class="logo">JOJO <span>STUDIO LIVE</span></div>
-  <div class="subtitle">Espace sécurisé de l'agence</div>
+<header>
+  <strong>JOJO <span>STUDIO LIVE</span></strong>
+  <button id="logoutButton" class="logout" style="float:right;display:none">Déconnexion</button>
+</header>
 
-  <div id="login">
-    <h2>Connexion</h2>
-    <form id="loginForm">
-      <label for="email">Adresse e-mail</label>
-      <input id="email" type="email" required autocomplete="username"
-             placeholder="Ton adresse e-mail">
-
-      <label for="password">Mot de passe</label>
-      <input id="password" type="password" required
-             autocomplete="current-password" placeholder="Ton mot de passe">
-
-      <button type="submit">Se connecter</button>
-    </form>
-  </div>
-
-  <div id="dashboard">
-    <h2>Bienvenue dans ton espace</h2>
-    <div class="info">
-      <p>Nom : <strong id="userName"></strong></p>
-      <p>Rôle : <strong id="userRole"></strong></p>
-      <p id="userEmail"></p>
-    </div>
-    <p id="roleInfo"></p>
-    <button class="logout" id="logoutButton">Déconnexion</button>
-  </div>
-
-  <div id="message"></div>
+<div id="login" class="panel">
+  <h2>Connexion Fondateur</h2>
+  <form id="loginForm">
+    <label for="email">Adresse e-mail</label>
+    <input id="email" type="email" required>
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" required>
+    <button type="submit">Se connecter</button>
+  </form>
+  <div id="loginMessage"></div>
 </div>
+
+<main id="dashboard">
+  <h1>Tableau de bord</h1>
+  <p id="welcome" style="color:#bbb"></p>
+
+  <div class="cards">
+    <div class="stat"><strong id="totalMembers">0</strong><small>Membres</small></div>
+    <div class="stat"><strong id="totalCreators">0</strong><small>Créateurs</small></div>
+    <div class="stat"><strong id="totalStaff">0</strong><small>Équipe interne</small></div>
+  </div>
+
+  <section class="panel">
+    <h2>Ajouter un membre</h2>
+    <p style="color:#aaa;font-size:14px">
+      Crée d'abord son compte dans Firebase Authentication,
+      puis renseigne son UID ici.
+    </p>
+
+    <form id="memberForm">
+      <label for="memberName">Nom et prénom</label>
+      <input id="memberName" required placeholder="Nom du membre">
+
+      <label for="memberEmail">Adresse e-mail</label>
+      <input id="memberEmail" type="email" required placeholder="membre@email.fr">
+
+      <label for="memberUid">UID Firebase Authentication</label>
+      <input id="memberUid" required placeholder="UID du compte">
+
+      <label for="memberRole">Rôle dans l'agence</label>
+      <select id="memberRole" required>
+        <option value="createur">Créateur</option>
+        <option value="moderateur">Modérateur</option>
+        <option value="recruteur">Recruteur</option>
+        <option value="responsable">Responsable</option>
+      </select>
+
+      <button type="submit">Ajouter le membre</button>
+    </form>
+    <div id="memberMessage"></div>
+  </section>
+
+  <section class="panel">
+    <h2>Mon équipe</h2>
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Nom</th><th>E-mail</th><th>Rôle</th><th>UID</th></tr>
+        </thead>
+        <tbody id="membersList">
+          <tr><td colspan="4">Chargement...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+</main>
 
 <script type="module">
 import { initializeApp } from
 "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
 import {
-  getAuth, signInWithEmailAndPassword, signOut
+  getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 import {
-  getFirestore, doc, getDoc
+  getFirestore, doc, getDoc, setDoc, getDocs,
+  collection, serverTimestamp
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
 const firebaseConfig = {
@@ -102,76 +137,130 @@ const db = getFirestore(app);
 
 const login = document.getElementById("login");
 const dashboard = document.getElementById("dashboard");
-const message = document.getElementById("message");
+const logoutButton = document.getElementById("logoutButton");
 
-const allowedRoles = [
-  "fondateur", "responsable", "recruteur",
-  "moderateur", "createur"
-];
-
-function showDashboard(user, profile) {
-  login.style.display = "none";
-  dashboard.style.display = "block";
-  document.getElementById("userName").textContent =
-    profile.name || "Membre Jojo Studio Live";
-  document.getElementById("userRole").textContent =
-    profile.role;
-  document.getElementById("userEmail").textContent =
-    user.email || "";
-  document.getElementById("roleInfo").textContent =
-    profile.role === "fondateur"
-      ? "Accès Fondateur reconnu. Le tableau de bord sera développé dans la prochaine étape."
-      : "Accès reconnu. Ton espace personnel sera développé prochainement.";
+function showMessage(id,text){
+  document.getElementById(id).textContent=text;
 }
 
-document.getElementById("loginForm").addEventListener("submit",
-async (event) => {
-  event.preventDefault();
-  message.textContent = "Connexion en cours...";
+async function loadMembers(){
+  const snapshot = await getDocs(collection(db,"users"));
+  const list = document.getElementById("membersList");
+  list.replaceChildren();
 
-  try {
-    const email = document.getElementById("email").value.trim();
-    const password = document.getElementById("password").value;
+  let creators=0,staff=0;
 
-    const result = await signInWithEmailAndPassword(
-      auth, email, password
-    );
+  snapshot.forEach(item=>{
+    const member=item.data();
+    if(member.role==="createur") creators++;
+    else staff++;
 
-    const profileRef = doc(db, "users", result.user.uid);
-    const profileSnap = await getDoc(profileRef);
+    const tr=document.createElement("tr");
+    [member.name||"Sans nom",member.email||"",member.role||"",item.id]
+      .forEach(value=>{
+        const td=document.createElement("td");
+        td.textContent=value;
+        tr.appendChild(td);
+      });
+    list.appendChild(tr);
+  });
 
-    if (!profileSnap.exists()) {
+  if(snapshot.empty){
+    const tr=document.createElement("tr");
+    const td=document.createElement("td");
+    td.colSpan=4;
+    td.textContent="Aucun membre enregistré.";
+    tr.appendChild(td);
+    list.appendChild(tr);
+  }
+
+  document.getElementById("totalMembers").textContent=snapshot.size;
+  document.getElementById("totalCreators").textContent=creators;
+  document.getElementById("totalStaff").textContent=staff;
+}
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){
+    login.style.display="block";
+    dashboard.style.display="none";
+    logoutButton.style.display="none";
+    return;
+  }
+
+  try{
+    const profile=await getDoc(doc(db,"users",user.uid));
+    if(!profile.exists()||profile.data().role!=="fondateur"){
       await signOut(auth);
-      throw new Error("Aucun profil d'agence n'est associé à ce compte.");
+      showMessage("loginMessage","Accès réservé au Fondateur.");
+      return;
     }
 
-    const profile = profileSnap.data();
+    login.style.display="none";
+    dashboard.style.display="block";
+    logoutButton.style.display="inline-block";
+    document.getElementById("welcome").textContent=
+      "Bienvenue, "+(profile.data().name||user.email);
 
-    if (!allowedRoles.includes(profile.role)) {
-      await signOut(auth);
-      throw new Error("Rôle non autorisé.");
-    }
-
-    message.textContent = "";
-    showDashboard(result.user, profile);
-
-  } catch (error) {
-    message.textContent =
-      error.code === "auth/invalid-credential"
-        ? "Adresse e-mail ou mot de passe incorrect."
-        : error.message;
+    await loadMembers();
+  }catch(error){
+    showMessage("loginMessage","Erreur : "+error.message);
   }
 });
 
-document.getElementById("logoutButton").addEventListener("click",
-async () => {
-  await signOut(auth);
-  dashboard.style.display = "none";
-  login.style.display = "block";
-  document.getElementById("password").value = "";
-  message.textContent = "Déconnexion effectuée.";
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  showMessage("loginMessage","Connexion...");
+  try{
+    await signInWithEmailAndPassword(
+      auth,
+      document.getElementById("email").value.trim(),
+      document.getElementById("password").value
+    );
+  }catch(error){
+    showMessage("loginMessage","Connexion impossible : "+error.message);
+  }
+});
+
+logoutButton.addEventListener("click",()=>signOut(auth));
+
+document.getElementById("memberForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  showMessage("memberMessage","Enregistrement...");
+
+  const user=auth.currentUser;
+  if(!user){
+    showMessage("memberMessage","Tu dois être connecté.");
+    return;
+  }
+
+  try{
+    const founder=await getDoc(doc(db,"users",user.uid));
+    if(!founder.exists()||founder.data().role!=="fondateur"){
+      throw new Error("Autorisation refusée.");
+    }
+
+    const uid=document.getElementById("memberUid").value.trim();
+    const name=document.getElementById("memberName").value.trim();
+    const email=document.getElementById("memberEmail").value.trim();
+    const role=document.getElementById("memberRole").value;
+
+    if(uid===user.uid) throw new Error("Tu ne peux pas remplacer ton propre profil.");
+
+    const existing=await getDoc(doc(db,"users",uid));
+    if(existing.exists()) throw new Error("Un profil existe déjà pour cet UID.");
+
+    await setDoc(doc(db,"users",uid),{
+      name,email,role,createdAt:serverTimestamp()
+    });
+
+    document.getElementById("memberForm").reset();
+    showMessage("memberMessage","Membre ajouté avec succès !");
+    await loadMembers();
+
+  }catch(error){
+    showMessage("memberMessage","Erreur : "+error.message);
+  }
 });
 </script>
 </body>
 </html>
-
