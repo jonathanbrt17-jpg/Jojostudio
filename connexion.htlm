@@ -1,0 +1,157 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Connexion | Jojo Studio Live</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;display:grid;place-items:center;
+  padding:20px;background:radial-gradient(ellipse at top,#29113f,#080611 65%);
+  color:white;font-family:Arial,sans-serif
+}
+.panel{
+  width:100%;max-width:430px;padding:30px;
+  background:#151020;border:1px solid #49335d;border-radius:18px;
+  box-shadow:0 20px 60px #0008
+}
+.logo{text-align:center;font-size:24px;font-weight:bold;margin-bottom:8px}
+.logo span{color:#c084fc}
+.subtitle{text-align:center;color:#aaa;font-size:13px;margin-bottom:30px}
+h2{font-size:21px;color:#e5caff}
+label{display:block;margin:15px 0 7px;font-size:13px;color:#ddd}
+input{
+  width:100%;padding:14px;background:#090712;color:white;
+  border:1px solid #49335d;border-radius:9px;outline:none
+}
+input:focus{border-color:#c084fc}
+button{
+  width:100%;padding:14px;margin-top:22px;border:0;border-radius:9px;
+  background:linear-gradient(135deg,#9333ea,#7024b7);
+  color:white;font-weight:bold;cursor:pointer
+}
+button:disabled{opacity:.6;cursor:wait}
+#message{font-size:13px;line-height:1.5;color:#d8b4fe;margin-top:15px}
+.back{display:block;text-align:center;color:#c084fc;margin-top:22px;text-decoration:none;font-size:13px}
+</style>
+</head>
+<body>
+
+<div class="panel">
+  <div class="logo">JOJO <span>STUDIO LIVE</span></div>
+  <div class="subtitle">Espace sécurisé des membres de l'agence</div>
+
+  <h2>Connexion à mon espace</h2>
+
+  <form id="loginForm">
+    <label for="email">Adresse e-mail</label>
+    <input id="email" type="email" autocomplete="username" required>
+
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" autocomplete="current-password" required>
+
+    <button id="submitButton" type="submit">Se connecter</button>
+  </form>
+
+  <div id="message"></div>
+  <a class="back" href="index.html">← Retour au site officiel</a>
+</div>
+
+<script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  onAuthStateChanged,
+  setPersistence,
+  browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+  getFirestore, doc, getDoc
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAXtgoUM86NRVQQSQrQC9VNH22EXiKoDPo",
+  authDomain: "jojo-studio-live-7ac91.firebaseapp.com",
+  databaseURL: "https://jojo-studio-live-7ac91-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "jojo-studio-live-7ac91",
+  storageBucket: "jojo-studio-live-7ac91.firebasestorage.app",
+  messagingSenderId: "881225433382",
+  appId: "1:881225433382:web:112ccc2dceece58c8641e7",
+  measurementId: "G-2XH20R9VBS"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const form = document.getElementById("loginForm");
+const button = document.getElementById("submitButton");
+const message = document.getElementById("message");
+
+let redirecting = false;
+
+async function redirectByRole(user) {
+  if (!user || redirecting) return;
+
+  redirecting = true;
+  message.textContent = "Vérification de ton espace...";
+
+  try {
+    const profile = await getDoc(doc(db, "users", user.uid));
+
+    if (!profile.exists()) {
+      throw new Error("Aucun profil d'agence associé à ce compte.");
+    }
+
+    const role = profile.data().role;
+
+    if (role === "fondateur") {
+      window.location.replace("admin.html");
+    } else if (role === "createur") {
+      window.location.replace("createur.html");
+    } else {
+      throw new Error("Ton rôle ne donne pas accès à ces espaces.");
+    }
+
+  } catch (error) {
+    redirecting = false;
+    message.textContent = error.message;
+  }
+}
+
+form.addEventListener("submit", async event => {
+  event.preventDefault();
+
+  button.disabled = true;
+  message.textContent = "Connexion en cours...";
+
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
+
+    const result = await signInWithEmailAndPassword(auth, email, password);
+
+    await redirectByRole(result.user);
+
+  } catch (error) {
+    message.textContent = "Connexion impossible : " + error.message;
+  } finally {
+    button.disabled = false;
+  }
+});
+
+onAuthStateChanged(auth, user => {
+  if (user) redirectByRole(user);
+});
+</script>
+
+</body>
+</html>
