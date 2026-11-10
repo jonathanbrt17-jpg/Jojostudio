@@ -1,0 +1,337 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jojo Studio Live | Gestion des statistiques</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080611;color:white;font-family:Arial,sans-serif}
+header{padding:18px 22px;background:#110b1c;border-bottom:1px solid #48245e;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:bold;font-size:21px}
+.logo span{color:#b45cff}
+main{max-width:1000px;margin:auto;padding:24px}
+.panel{background:#151020;border:1px solid #38234c;border-radius:15px;padding:22px;margin-bottom:20px}
+h1,h2{margin-top:0}
+.muted{color:#aaa}
+label{display:block;margin:14px 0 7px;color:#ddd;font-size:14px}
+input,select{width:100%;padding:13px;background:#090712;color:white;border:1px solid #49335d;border-radius:8px;font-size:15px}
+button{padding:13px 18px;background:#9333ea;color:white;border:0;border-radius:9px;font-weight:bold;cursor:pointer}
+button:hover{background:#a855f7}
+button:disabled{opacity:.5;cursor:not-allowed}
+.logout{background:#43254f}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:15px}
+#login{max-width:430px;margin:70px auto}
+#app{display:none}
+#message{margin-top:15px;color:#d8b4fe;white-space:pre-wrap}
+.success{color:#86efac!important}
+.error{color:#fca5a5!important}
+.note{padding:14px;background:#21152d;border-radius:9px;color:#ddd;font-size:13px;line-height:1.5}
+@media(max-width:600px){main{padding:14px}.panel{padding:17px}header{padding:14px}}
+</style>
+</head>
+<body>
+
+<header>
+ <div class="logo">JOJO <span>STUDIO LIVE</span></div>
+ <button id="logout" class="logout" style="display:none">Déconnexion</button>
+</header>
+
+<div id="login" class="panel">
+ <h2>Espace Fondateur</h2>
+ <p class="muted">Connecte-toi pour gérer les statistiques de tes créateurs.</p>
+ <form id="loginForm">
+  <label>Adresse e-mail</label>
+  <input id="email" type="email" required>
+  <label>Mot de passe</label>
+  <input id="password" type="password" required>
+  <button type="submit" style="width:100%">Se connecter</button>
+ </form>
+ <div id="message"></div>
+</div>
+
+<main id="app">
+ <div class="panel">
+  <h1>Gestion des statistiques</h1>
+  <p class="muted">Espace réservé au Fondateur de Jojo Studio Live.</p>
+  <label for="creatorSelect">Sélectionner un créateur</label>
+  <select id="creatorSelect">
+   <option value="">Chargement des créateurs...</option>
+  </select>
+  <p id="creatorInfo" class="muted"></p>
+ </div>
+
+ <form id="statsForm" class="panel" style="display:none">
+  <h2>Statistiques mensuelles</h2>
+  <label for="month">Mois des statistiques</label>
+  <input id="month" type="text" placeholder="Novembre 2026" required>
+
+  <div class="grid">
+   <div>
+    <label for="hours">Total heures de LIVE</label>
+    <input id="hours" type="number" min="0" step="any" required>
+   </div>
+   <div>
+    <label for="diamonds">Diamants</label>
+    <input id="diamonds" type="number" min="0" step="any" required>
+   </div>
+   <div>
+    <label for="sessions">Nombre de LIVE</label>
+    <input id="sessions" type="number" min="0" step="1" required>
+   </div>
+   <div>
+    <label for="revenue">Revenus estimés (€)</label>
+    <input id="revenue" type="number" min="0" step="any" required>
+   </div>
+   <div>
+    <label for="hoursGoal">Objectif heures de LIVE</label>
+    <input id="hoursGoal" type="number" min="0" step="any" required>
+   </div>
+   <div>
+    <label for="diamondsGoal">Objectif diamants</label>
+    <input id="diamondsGoal" type="number" min="0" step="any" required>
+   </div>
+  </div>
+
+  <div class="note" style="margin:20px 0">
+   Les statistiques sont enregistrées dans le document Firebase du créateur sélectionné. Les noms de champs déjà existants sont conservés, y compris les éventuels espaces à la fin.
+  </div>
+
+  <button id="saveButton" type="submit" style="width:100%">
+   Enregistrer les statistiques
+  </button>
+  <div id="saveMessage"></div>
+ </form>
+</main>
+
+<script type="module">
+import {initializeApp,getApps,getApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+ getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+ getFirestore,doc,getDoc,getDocs,collection,query,where,setDoc
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig={
+ apiKey:"AIzaSyAXtgoUM86NRVQQSQrQC9VNH22EXiKoDPo",
+ authDomain:"jojo-studio-live-7ac91.firebaseapp.com",
+ databaseURL:"https://jojo-studio-live-7ac91-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId:"jojo-studio-live-7ac91",
+ storageBucket:"jojo-studio-live-7ac91.firebasestorage.app",
+ messagingSenderId:"881225433382",
+ appId:"1:881225433382:web:112ccc2dceece58c8641e7",
+ measurementId:"G-2XH20R9VBS"
+};
+
+const appFirebase=getApps().length?getApp():initializeApp(firebaseConfig);
+const auth=getAuth(appFirebase);
+const db=getFirestore(appFirebase);
+
+const login=document.getElementById("login");
+const appPage=document.getElementById("app");
+const message=document.getElementById("message");
+const saveMessage=document.getElementById("saveMessage");
+const select=document.getElementById("creatorSelect");
+const form=document.getElementById("statsForm");
+const saveButton=document.getElementById("saveButton");
+
+let creators=[];
+let selectedUid=null;
+let currentStats={};
+
+function showLoginMessage(text,type=""){
+ message.textContent=text;
+ message.className=type;
+}
+
+function getExistingKey(data,possibleNames,fallback){
+ return possibleNames.find(name=>
+  Object.prototype.hasOwnProperty.call(data,name)
+ )||fallback;
+}
+
+function getNumber(data,names){
+ for(const name of names){
+  if(Object.prototype.hasOwnProperty.call(data,name)){
+   return Number(data[name])||0;
+  }
+ }
+ return 0;
+}
+
+async function verifyFounder(user){
+ const snap=await getDoc(doc(db,"users",user.uid));
+ if(!snap.exists()||snap.data().role!=="fondateur"){
+  throw new Error("Accès refusé : compte Fondateur uniquement.");
+ }
+}
+
+async function loadCreators(){
+ const q=query(collection(db,"users"),where("role","==","createur"));
+ const result=await getDocs(q);
+
+ creators=result.docs.map(item=>({
+  uid:item.id,
+  ...item.data()
+ }));
+
+ select.innerHTML='<option value="">Choisir un créateur</option>';
+
+ creators.forEach(creator=>{
+  const option=document.createElement("option");
+  option.value=creator.uid;
+  option.textContent=(creator.name||"Créateur")+" — "+(creator.tiktok||creator.uid);
+  select.appendChild(option);
+ });
+
+ if(creators.length===0){
+  select.innerHTML='<option value="">Aucun créateur enregistré</option>';
+ }
+}
+
+async function loadSelectedCreator(uid){
+ selectedUid=uid;
+ saveMessage.textContent="";
+ form.style.display="none";
+
+ if(!uid)return;
+
+ const creator=creators.find(item=>item.uid===uid);
+ document.getElementById("creatorInfo").textContent=
+  creator?(creator.name||"Créateur")+" | "+(creator.tiktok||"TikTok non renseigné"):"";
+
+ const snap=await getDoc(doc(db,"creatorStats",uid));
+ currentStats=snap.exists()?snap.data():{};
+
+ document.getElementById("month").value=
+  currentStats["Moi"]||"";
+
+ document.getElementById("hours").value=
+  getNumber(currentStats,["Total heure de live"]);
+
+ document.getElementById("diamonds").value=
+  getNumber(currentStats,["diamant"]);
+
+ document.getElementById("sessions").value=
+  getNumber(currentStats,["nombre de live ","nombre de live"]);
+
+ document.getElementById("revenue").value=
+  getNumber(currentStats,["revenue"]);
+
+ document.getElementById("hoursGoal").value=
+  getNumber(currentStats,["objectif live heure ","objectif live heure"]);
+
+ document.getElementById("diamondsGoal").value=
+  getNumber(currentStats,["objectif dimant"]);
+
+ form.style.display="block";
+}
+
+document.getElementById("loginForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ showLoginMessage("Connexion en cours...");
+
+ try{
+  await signInWithEmailAndPassword(
+   auth,
+   document.getElementById("email").value.trim(),
+   document.getElementById("password").value
+  );
+ }catch(error){
+  showLoginMessage("Erreur : "+error.message,"error");
+ }
+});
+
+onAuthStateChanged(auth,async user=>{
+ if(!user){
+  login.style.display="block";
+  appPage.style.display="none";
+  document.getElementById("logout").style.display="none";
+  return;
+ }
+
+ try{
+  await verifyFounder(user);
+  await loadCreators();
+
+  login.style.display="none";
+  appPage.style.display="block";
+  document.getElementById("logout").style.display="block";
+  showLoginMessage("");
+ }catch(error){
+  showLoginMessage(error.message,"error");
+  await signOut(auth);
+ }
+});
+
+select.addEventListener("change",async()=>{
+ try{
+  await loadSelectedCreator(select.value);
+ }catch(error){
+  saveMessage.textContent="Impossible de charger les statistiques : "+error.message;
+  saveMessage.className="error";
+ }
+});
+
+form.addEventListener("submit",async event=>{
+ event.preventDefault();
+
+ if(!selectedUid)return;
+
+ saveButton.disabled=true;
+ saveButton.textContent="Enregistrement...";
+ saveMessage.textContent="";
+
+ try{
+  const data={
+   "Moi":document.getElementById("month").value.trim(),
+   "Total heure de live":Number(document.getElementById("hours").value),
+   "diamant":Number(document.getElementById("diamonds").value),
+   "revenue":Number(document.getElementById("revenue").value),
+   "objectif dimant":Number(document.getElementById("diamondsGoal").value)
+  };
+
+  // Conserve le nom exact du champ déjà présent dans Firestore.
+  const sessionsKey=getExistingKey(
+   currentStats,["nombre de live ","nombre de live"],"nombre de live"
+  );
+
+  const hoursKey=getExistingKey(
+   currentStats,["objectif live heure ","objectif live heure"],"objectif live heure"
+  );
+
+  data[sessionsKey]=Number(document.getElementById("sessions").value);
+  data[hoursKey]=Number(document.getElementById("hoursGoal").value);
+
+  await setDoc(
+   doc(db,"creatorStats",selectedUid),
+   data,
+   {merge:true}
+  );
+
+  currentStats={...currentStats,...data};
+
+  saveMessage.textContent="✓ Statistiques enregistrées avec succès !";
+  saveMessage.className="success";
+
+ }catch(error){
+  console.error(error);
+  saveMessage.textContent="Erreur d'enregistrement : "+error.message;
+  saveMessage.className="error";
+ }finally{
+  saveButton.disabled=false;
+  saveButton.textContent="Enregistrer les statistiques";
+ }
+});
+
+document.getElementById("logout").addEventListener("click",async()=>{
+ await signOut(auth);
+});
+</script>
+</body>
+</html>
