@@ -1,0 +1,194 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jojo Studio Live | Espace Créateur</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080611;color:white;font-family:Arial,sans-serif}
+header{padding:20px;background:#110b1c;border-bottom:1px solid #40245b;display:flex;justify-content:space-between;align-items:center}
+.logo{font-weight:bold;font-size:21px}.logo span{color:#a855f7}
+main{max-width:1050px;margin:auto;padding:25px}
+.panel,.stat{background:#151020;border:1px solid #38234c;border-radius:14px;padding:22px}
+#login{max-width:430px;margin:70px auto}
+input{width:100%;padding:14px;margin:8px 0 17px;background:#090712;color:white;border:1px solid #49335d;border-radius:8px}
+label{color:#ddd;font-size:14px}
+button{padding:12px 18px;background:#9333ea;border:0;border-radius:8px;color:white;font-weight:bold;cursor:pointer}
+button:hover{background:#a855f7}
+#dashboard{display:none}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:15px;margin:25px 0}
+.stat strong{display:block;font-size:30px;color:#c084fc;margin:10px 0}
+.stat small{color:#aaa}
+.progress{height:12px;background:#30213e;border-radius:20px;overflow:hidden;margin:12px 0}
+.progress div{height:100%;width:0;background:#a855f7;border-radius:20px}
+.muted{color:#aaa}
+#message{margin-top:15px;color:#d8b4fe}
+.logout{background:#43254f}
+@media(max-width:600px){main{padding:14px}.panel,.stat{padding:17px}header{padding:15px}}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">JOJO <span>STUDIO LIVE</span></div>
+  <button id="logout" class="logout" style="display:none">Déconnexion</button>
+</header>
+
+<div id="login" class="panel">
+  <h2>Ton espace créateur</h2>
+  <p class="muted">Connecte-toi pour consulter tes résultats.</p>
+  <form id="loginForm">
+    <label for="email">Adresse e-mail</label>
+    <input id="email" type="email" required>
+    <label for="password">Mot de passe</label>
+    <input id="password" type="password" required>
+    <button type="submit">Se connecter</button>
+  </form>
+  <div id="message"></div>
+</div>
+
+<main id="dashboard">
+  <div class="panel">
+    <p class="muted">BIENVENUE DANS TON ESPACE</p>
+    <h1 id="creatorName">Créateur</h1>
+    <p id="creatorTikTok" class="muted"></p>
+    <p id="monthLabel" class="muted"></p>
+  </div>
+
+  <div class="grid">
+    <div class="stat"><small>Heures de LIVE</small><strong id="hours">0 h</strong></div>
+    <div class="stat"><small>Diamants</small><strong id="diamonds">0</strong></div>
+    <div class="stat"><small>Revenus estimés</small><strong id="revenue">0 €</strong></div>
+    <div class="stat"><small>Sessions LIVE</small><strong id="sessions">0</strong></div>
+  </div>
+
+  <section class="panel">
+    <h2>Mes objectifs mensuels</h2>
+    <p>Objectif d'heures : <strong id="hoursProgress">0 / 0 h</strong></p>
+    <div class="progress"><div id="hoursBar"></div></div>
+    <p>Objectif de diamants : <strong id="diamondsProgress">0 / 0</strong></p>
+    <div class="progress"><div id="diamondsBar"></div></div>
+  </section>
+
+  <p class="muted" style="text-align:center;margin-top:25px">
+    Tes statistiques sont renseignées par Jojo Studio Live.
+  </p>
+</main>
+
+<script type="module">
+import {initializeApp} from
+"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+
+import {
+  getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+import {
+  getFirestore,doc,getDoc
+} from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+const firebaseConfig={
+  apiKey:"AIzaSyAXtgoUM86NRVQQSQrQC9VNH22EXiKoDPo",
+  authDomain:"jojo-studio-live-7ac91.firebaseapp.com",
+  databaseURL:"https://jojo-studio-live-7ac91-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"jojo-studio-live-7ac91",
+  storageBucket:"jojo-studio-live-7ac91.firebasestorage.app",
+  messagingSenderId:"881225433382",
+  appId:"1:881225433382:web:112ccc2dceece58c8641e7",
+  measurementId:"G-2XH20R9VBS"
+};
+
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+
+const login=document.getElementById("login");
+const dashboard=document.getElementById("dashboard");
+const message=document.getElementById("message");
+
+function setProgress(barId,value,target){
+  const percent=target>0?Math.min(100,Math.max(0,value/target*100)):0;
+  document.getElementById(barId).style.width=percent+"%";
+}
+
+async function loadCreator(user){
+  const profileSnap=await getDoc(doc(db,"users",user.uid));
+
+  if(!profileSnap.exists()||profileSnap.data().role!=="createur"){
+    await signOut(auth);
+    throw new Error("Ce compte n'est pas enregistré comme créateur.");
+  }
+
+  const profile=profileSnap.data();
+  const statsSnap=await getDoc(doc(db,"creatorStats",user.uid));
+  const stats=statsSnap.exists()?statsSnap.data():{};
+
+  document.getElementById("creatorName").textContent=
+    profile.name||"Créateur";
+  document.getElementById("creatorTikTok").textContent=
+    profile.tiktok?"TikTok : "+profile.tiktok:"Espace créateur Jojo Studio Live";
+
+  document.getElementById("monthLabel").textContent=
+    "Statistiques : "+(stats.month||"Mois en cours");
+
+  const hours=Number(stats.totalHours)||0;
+  const diamonds=Number(stats.diamonds)||0;
+  const revenue=Number(stats.revenue)||0;
+  const sessions=Number(stats.liveCount)||0;
+  const hoursGoal=Number(stats.objectiveHours)||0;
+  const diamondsGoal=Number(stats.objectiveDiamonds)||0;
+
+  document.getElementById("hours").textContent=hours+" h";
+  document.getElementById("diamonds").textContent=diamonds.toLocaleString("fr-FR");
+  document.getElementById("revenue").textContent=
+    revenue.toLocaleString("fr-FR",{style:"currency",currency:"EUR"});
+  document.getElementById("sessions").textContent=sessions;
+
+  document.getElementById("hoursProgress").textContent=
+    hours+" / "+hoursGoal+" h";
+  document.getElementById("diamondsProgress").textContent=
+    diamonds.toLocaleString("fr-FR")+" / "+diamondsGoal.toLocaleString("fr-FR");
+
+  setProgress("hoursBar",hours,hoursGoal);
+  setProgress("diamondsBar",diamonds,diamondsGoal);
+
+  login.style.display="none";
+  dashboard.style.display="block";
+  document.getElementById("logout").style.display="block";
+}
+
+document.getElementById("loginForm").addEventListener("submit",async e=>{
+  e.preventDefault();
+  message.textContent="Connexion en cours...";
+  try{
+    await signInWithEmailAndPassword(
+      auth,
+      document.getElementById("email").value.trim(),
+      document.getElementById("password").value
+    );
+  }catch(error){
+    message.textContent="Erreur de connexion : "+error.message;
+  }
+});
+
+onAuthStateChanged(auth,async user=>{
+  if(!user){
+    login.style.display="block";
+    dashboard.style.display="none";
+    document.getElementById("logout").style.display="none";
+    return;
+  }
+  try{
+    await loadCreator(user);
+    message.textContent="";
+  }catch(error){
+    message.textContent=error.message;
+  }
+});
+
+document.getElementById("logout").addEventListener("click",()=>signOut(auth));
+</script>
+</body>
+</html>
