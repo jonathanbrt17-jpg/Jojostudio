@@ -1,0 +1,287 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jojo Studio Live | Agence TikTok LIVE</title>
+<meta name="description" content="Jojo Studio Live accompagne les créateurs TikTok LIVE vers leur réussite.">
+<style>
+:root {
+  --violet: #a855f7;
+  --dark: #080611;
+  --panel: #151020;
+  --white: #ffffff;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--dark);
+  color: var(--white);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(8,6,17,.95);
+  border-bottom: 1px solid #352047;
+  padding: 18px 7%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.logo { font-size: 22px; font-weight: bold; }
+.logo span { color: var(--violet); }
+nav { display: flex; gap: 22px; flex-wrap: wrap; }
+nav a { color: white; text-decoration: none; font-size: 14px; }
+nav a:hover { color: var(--violet); }
+.hero {
+  min-height: 570px;
+  padding: 110px 8%;
+  display: flex;
+  align-items: center;
+  background: radial-gradient(ellipse at 75% 45%, #542078 0%, #170d29 35%, #080611 75%);
+}
+.hero-content { max-width: 750px; }
+.tag {
+  color: #d8b4fe;
+  border: 1px solid #8b3bd1;
+  padding: 8px 15px;
+  border-radius: 30px;
+  display: inline-block;
+  margin-bottom: 25px;
+  font-size: 13px;
+}
+h1 { font-size: clamp(40px, 7vw, 72px); line-height: 1.08; }
+h1 span { color: var(--violet); }
+.hero p { color: #c9c2d3; margin: 25px 0; max-width: 580px; }
+.btn {
+  display: inline-block;
+  background: var(--violet);
+  color: white;
+  text-decoration: none;
+  padding: 14px 23px;
+  border-radius: 9px;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}
+.btn.secondary { background: transparent; border: 1px solid var(--violet); margin-left: 10px; }
+section { padding: 80px 8%; }
+.section-title { text-align: center; margin-bottom: 45px; }
+.section-title h2 { font-size: 35px; }
+.section-title span { color: var(--violet); }
+.section-title p { color: #aaa; margin-top: 10px; }
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: var(--panel);
+  border: 1px solid #38234c;
+  padding: 28px;
+  border-radius: 15px;
+  transition: .25s;
+}
+.card:hover { transform: translateY(-5px); border-color: var(--violet); }
+.card h3 { color: #d8b4fe; margin-bottom: 12px; }
+.card p { color: #bbb; font-size: 14px; }
+.about { background: #100b1b; }
+.about-content { max-width: 800px; margin: auto; text-align: center; }
+.about-content p { color: #c5bdcf; margin-top: 18px; }
+form {
+  max-width: 650px;
+  margin: auto;
+  background: var(--panel);
+  padding: 30px;
+  border: 1px solid #38234c;
+  border-radius: 15px;
+}
+input, select, textarea {
+  width: 100%;
+  padding: 14px;
+  margin: 8px 0 18px;
+  border-radius: 8px;
+  border: 1px solid #49335d;
+  background: #0b0812;
+  color: white;
+  font-size: 15px;
+}
+label { font-size: 14px; color: #ddd; }
+textarea { min-height: 110px; resize: vertical; }
+form .btn { width: 100%; font-size: 16px; }
+.notice { color: #aaa; font-size: 12px; margin-top: 12px; }
+.contact { text-align: center; background: #100b1b; }
+.contact p { color: #bbb; margin: 15px 0 25px; }
+footer {
+  padding: 30px 8%;
+  text-align: center;
+  color: #999;
+  border-top: 1px solid #30203e;
+  font-size: 13px;
+}
+footer span { color: var(--violet); }
+@media(max-width:650px) {
+  header { flex-direction: column; gap: 15px; }
+  nav { justify-content: center; gap: 14px; }
+  .hero { padding: 85px 7%; min-height: 500px; }
+  .btn.secondary { margin: 12px 0 0; }
+  section { padding: 65px 7%; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">JOJO <span>STUDIO LIVE</span></div>
+  <nav>
+    <a href="#accueil">Accueil</a>
+    <a href="#services">Services</a>
+    <a href="#agence">L'agence</a>
+    <a href="#recrutement">Recrutement</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<main>
+<section class="hero" id="accueil">
+  <div class="hero-content">
+    <div class="tag">AGENCE TIKTOK LIVE</div>
+    <h1>Ton talent.<br><span>Notre accompagnement.</span></h1>
+    <p>
+      Bienvenue chez Jojo Studio Live. Nous accompagnons les créateurs
+      TikTok LIVE dans leur progression, leurs objectifs et le développement
+      de leur communauté.
+    </p>
+    <a class="btn" href="#recrutement">Rejoindre l'agence</a>
+    <a class="btn secondary" href="#services">Découvrir nos services</a>
+  </div>
+</section>
+
+<section id="services">
+  <div class="section-title">
+    <h2>Nos <span>services</span></h2>
+    <p>Un accompagnement pour développer ton potentiel.</p>
+  </div>
+  <div class="cards">
+    <article class="card">
+      <h3>Accompagnement personnel</h3>
+      <p>Un suivi adapté à ton profil, ton expérience et tes ambitions.</p>
+    </article>
+    <article class="card">
+      <h3>Coaching LIVE</h3>
+      <p>Des conseils pour améliorer tes directs et fidéliser ta communauté.</p>
+    </article>
+    <article class="card">
+      <h3>Objectifs et progression</h3>
+      <p>Un accompagnement pour organiser tes objectifs et suivre tes progrès.</p>
+    </article>
+    <article class="card">
+      <h3>Événements et battles</h3>
+      <p>Des conseils pour participer à des événements et développer ton réseau.</p>
+    </article>
+    <article class="card">
+      <h3>Conseils de revenus</h3>
+      <p>Des informations pour mieux comprendre les revenus liés aux LIVE.</p>
+    </article>
+    <article class="card">
+      <h3>Conseils de création</h3>
+      <p>Des idées pour améliorer ton contenu et développer ton audience.</p>
+    </article>
+  </div>
+</section>
+
+<section class="about" id="agence">
+  <div class="about-content">
+    <div class="section-title">
+      <h2>Bienvenue chez <span>Jojo Studio Live</span></h2>
+    </div>
+    <p>
+      Notre ambition est de construire une agence dynamique, sérieuse
+      et accessible à tous les créateurs TikTok LIVE.
+      Débutant ou expérimenté, chaque créateur mérite un accompagnement
+      adapté à ses ambitions.
+    </p>
+    <p><strong>Ton talent. Notre accompagnement. Ton succès.</strong></p>
+  </div>
+</section>
+
+<section id="recrutement">
+  <div class="section-title">
+    <h2>Rejoins <span>notre équipe</span></h2>
+    <p>Les candidatures sont ouvertes aux créateurs débutants et expérimentés.</p>
+  </div>
+  <form id="applicationForm">
+    <label for="name">Nom et prénom</label>
+    <input id="name" required placeholder="Ton nom">
+
+    <label for="tiktok">Pseudo TikTok</label>
+    <input id="tiktok" required placeholder="@tonpseudo">
+
+    <label for="age">Âge</label>
+    <input id="age" type="number" min="18" required placeholder="Ton âge">
+
+    <label for="experience">Ton expérience en LIVE</label>
+    <select id="experience" required>
+      <option value="">Choisir une réponse</option>
+      <option>Je débute</option>
+      <option>Quelques semaines</option>
+      <option>Plusieurs mois</option>
+      <option>Plusieurs années</option>
+    </select>
+
+    <label for="message">Présente-toi et parle-nous de tes objectifs</label>
+    <textarea id="message" required placeholder="Écris quelques mots..."></textarea>
+
+    <button class="btn" type="submit">Envoyer ma candidature</button>
+    <p class="notice">
+      Le bouton prépare un message WhatsApp avec tes réponses.
+      Vérifie les informations avant de l'envoyer.
+    </p>
+  </form>
+</section>
+
+<section class="contact" id="contact">
+  <div class="section-title">
+    <h2>Contacte <span>notre agence</span></h2>
+  </div>
+  <p>Une question ou un projet ? Notre équipe est disponible.</p>
+  <a class="btn" href="https://wa.me/33745515935" target="_blank">Contacter sur WhatsApp</a>
+  <a class="btn secondary" href="mailto:jojostudio.pro@gmail.com">Envoyer un e-mail</a>
+</section>
+</main>
+
+<footer>
+  <p>© <span id="year"></span> Jojo Studio Live — Tous droits réservés.</p>
+  <p>Agence indépendante. TikTok est une marque de ses propriétaires respectifs.</p>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+document.getElementById("applicationForm").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value.trim();
+  const tiktok = document.getElementById("tiktok").value.trim();
+  const age = document.getElementById("age").value;
+  const experience = document.getElementById("experience").value;
+  const message = document.getElementById("message").value.trim();
+
+  const content =
+    "Bonjour Jojo Studio Live ! Je souhaite rejoindre votre agence.%0A%0A" +
+    "Nom : " + encodeURIComponent(name) + "%0A" +
+    "TikTok : " + encodeURIComponent(tiktok) + "%0A" +
+    "Âge : " + encodeURIComponent(age) + "%0A" +
+    "Expérience : " + encodeURIComponent(experience) + "%0A" +
+    "Présentation : " + encodeURIComponent(message);
+
+  window.open("https://wa.me/33745515935?text=" + content, "_blank");
+});
+</script>
+
+</body>
+</html>
