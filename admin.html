@@ -8,846 +8,657 @@
 <title>Jojo Studio Live | Administration</title>
 
 <style>
-:root {
-  --bg: #080611;
-  --surface: #120d1d;
-  --surface2: #1b1428;
-  --border: #30213f;
-  --purple: #9333ea;
-  --purple-light: #c084fc;
-  --text: #ffffff;
-  --muted: #aaa1b5;
-  --green: #4ade80;
+:root{
+ --bg:#080611;--surface:#120d1d;--surface2:#1b1428;
+ --border:#30213f;--purple:#9333ea;--light:#c084fc;
+ --text:#fff;--muted:#aaa1b5;--green:#4ade80;
 }
-
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+ margin:0;background:radial-gradient(ellipse at top right,#28113e 0%,transparent 38%),var(--bg);
+ color:var(--text);font-family:Arial,sans-serif;min-height:100vh
 }
-
-body {
-  margin: 0;
-  background:
-    radial-gradient(ellipse at top right, #28113e 0%, transparent 38%),
-    var(--bg);
-  color: var(--text);
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
+button,input,select{font:inherit}
+header{
+ min-height:76px;padding:15px 5%;display:flex;align-items:center;
+ justify-content:space-between;gap:15px;background:rgba(17,11,28,.95);
+ border-bottom:1px solid var(--border);position:sticky;top:0;z-index:10;
+ backdrop-filter:blur(12px)
 }
-
-button, input, select {
-  font: inherit;
+.logo{font-size:21px;font-weight:900;letter-spacing:1px}
+.logo span{color:var(--light)}
+.header-right{display:flex;align-items:center;gap:12px}
+.admin-label{color:var(--light);font-size:12px;border:1px solid #69339a;padding:7px 11px;border-radius:20px}
+button{
+ display:inline-flex;align-items:center;justify-content:center;gap:8px;
+ padding:13px 18px;border:0;border-radius:9px;
+ background:linear-gradient(135deg,#9333ea,#7024b7);
+ color:white;font-weight:bold;cursor:pointer;transition:.2s
 }
-.back-button {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 11px 16px;
-  margin-bottom: 20px;
-  background: #211630;
-  color: #d8b4fe;
-  border: 1px solid #49335d;
-  border-radius: 9px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: .2s;
+button:hover{background:linear-gradient(135deg,#a855f7,#8534cf);transform:translateY(-2px)}
+button:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.logout{background:#35213f;border:1px solid #69417d}
+main{max-width:1150px;margin:auto;padding:35px 22px 60px}
+.page-heading{margin-bottom:28px}
+.page-heading h1{font-size:30px;margin:0 0 9px}
+.page-heading p{color:var(--muted);margin:0;line-height:1.5}
+.eyebrow{color:var(--light);font-size:12px;text-transform:uppercase;letter-spacing:2px;font-weight:bold;margin-bottom:10px}
+.panel{
+ background:linear-gradient(145deg,#171021,#100b19);
+ border:1px solid var(--border);border-radius:16px;padding:24px;
+ margin-bottom:22px;box-shadow:0 12px 35px #00000020
 }
-
-.back-button:hover {
-  background: #352044;
-  border-color: #9333ea;
-  transform: translateX(-3px);
+.panel h2{color:#e5caff;font-size:19px;margin:0 0 18px}
+.panel-description{color:var(--muted);font-size:13px;line-height:1.6;margin-top:-8px;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:17px;margin-bottom:25px}
+.stat{background:linear-gradient(145deg,#211630,#171020);border:1px solid #43295b;border-radius:14px;padding:22px}
+.stat strong{display:block;font-size:32px;color:var(--light);margin-bottom:7px}
+.stat small{color:var(--muted);font-size:13px}
+.quick-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;margin-bottom:27px}
+.action-card{
+ display:flex;align-items:center;gap:15px;padding:19px;border-radius:13px;
+ background:#171020;border:1px solid var(--border);color:white;text-decoration:none;transition:.2s
 }
-/* HEADER */
-
-header {
-  min-height: 76px;
-  padding: 15px 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  background: rgba(17, 11, 28, .95);
-  border-bottom: 1px solid var(--border);
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  backdrop-filter: blur(12px);
+.action-card:hover{border-color:var(--purple);background:#21152f;transform:translateY(-2px)}
+.action-icon{width:45px;height:45px;display:grid;place-items:center;border-radius:12px;background:#9333ea25;font-size:22px}
+.action-card strong{display:block;margin-bottom:5px}
+.action-card small{color:var(--muted);font-size:12px}
+label{display:block;font-size:13px;color:#d9cce5;margin:12px 0 7px}
+input,select{
+ width:100%;padding:14px;background:#090712;color:white;
+ border:1px solid #49335d;border-radius:9px;outline:none
 }
+input:focus,select:focus{border-color:var(--light);box-shadow:0 0 0 3px #9333ea22}
+input::placeholder{color:#766b80}
+select option{background:#151020}
+.table-wrap{overflow-x:auto;border-radius:10px}
+table{width:100%;border-collapse:collapse;min-width:550px}
+th,td{text-align:left;padding:15px 13px;border-bottom:1px solid var(--border);font-size:13px}
+th{color:var(--light);background:#211630;font-size:12px;text-transform:uppercase}
+td{color:#ded7e7}
+tbody tr:hover{background:#ffffff08}
+#login{max-width:440px;margin:85px auto;padding:30px}
+.login-logo{text-align:center;margin-bottom:25px}
+.login-logo .logo{font-size:25px}
+.login-logo p{color:var(--muted);font-size:13px}
+#login button{width:100%;margin-top:10px}
+#dashboard{display:none}
+#loginMessage,#memberMessage,.status-message{margin-top:15px;color:var(--light);font-size:13px;line-height:1.5}
+footer{text-align:center;padding:25px;color:#746b7e;font-size:12px;border-top:1px solid var(--border)}
 
-.logo {
-  font-size: 21px;
-  font-weight: 900;
-  letter-spacing: 1px;
+/* MESSAGERIE */
+.messages-layout{
+ display:grid;grid-template-columns:300px minmax(0,1fr);
+ border:1px solid var(--border);border-radius:15px;overflow:hidden;
+ min-height:530px;background:#100b19
 }
-
-.logo span {
-  color: var(--purple-light);
+.creator-list{border-right:1px solid var(--border);background:#120d1d}
+.creator-list-header{padding:18px;border-bottom:1px solid var(--border)}
+.creator-list-header h3{margin:0 0 12px;color:#e5caff}
+.creator-list-header input{padding:11px}
+.creator-items{max-height:470px;overflow-y:auto}
+.creator-item{
+ width:100%;display:block;text-align:left;background:transparent;
+ border:0;border-bottom:1px solid #30213f;border-radius:0;
+ padding:16px;transform:none!important;box-shadow:none!important
 }
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+.creator-item:hover,.creator-item.selected{background:#281739}
+.creator-item strong{display:block;margin-bottom:5px;color:white}
+.creator-item small{display:block;color:#aaa1b5;font-weight:normal;overflow:hidden;text-overflow:ellipsis}
+.creator-item .creator-role{color:#c084fc;font-size:11px;margin-top:6px}
+.chat-area{display:flex;flex-direction:column;min-width:0}
+.chat-header{padding:18px 20px;border-bottom:1px solid var(--border);background:#171020}
+.chat-header h3{margin:0 0 5px;color:#e5caff}
+.chat-header p{margin:0;color:var(--muted);font-size:12px}
+.chat-messages{
+ height:390px;overflow-y:auto;padding:18px;
+ display:flex;flex-direction:column;gap:13px
 }
-
-.admin-label {
-  color: var(--purple-light);
-  font-size: 12px;
-  border: 1px solid #69339a;
-  padding: 7px 11px;
-  border-radius: 20px;
+.chat-empty{margin:auto;text-align:center;color:var(--muted);line-height:1.6;padding:20px}
+.message-row{display:flex;flex-direction:column;max-width:82%;align-self:flex-start}
+.message-row.mine{align-self:flex-end;align-items:flex-end}
+.message-author{font-size:12px;color:#c084fc;margin:0 7px 5px}
+.message-bubble{
+ background:#2a2037;border:1px solid #49335d;padding:11px 14px;
+ border-radius:14px 14px 14px 3px;overflow-wrap:anywhere;white-space:pre-wrap;line-height:1.45
 }
-
-/* BOUTONS */
-
-button, .admin-button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 13px 18px;
-  border: 0;
-  border-radius: 9px;
-  background: linear-gradient(135deg, #9333ea, #7024b7);
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  cursor: pointer;
-  transition: .2s ease;
-}
-
-button:hover, .admin-button:hover {
-  background: linear-gradient(135deg, #a855f7, #8534cf);
-  transform: translateY(-2px);
-  box-shadow: 0 7px 20px #9333ea33;
-}
-
-.logout {
-  background: #35213f;
-  border: 1px solid #69417d;
-}
-
-.logout:hover {
-  background: #51305f;
-}
-
-/* STRUCTURE */
-
-main {
-  max-width: 1150px;
-  margin: auto;
-  padding: 35px 22px 60px;
-}
-
-.page-heading {
-  margin-bottom: 28px;
-}
-
-.page-heading h1 {
-  font-size: 30px;
-  margin: 0 0 9px;
-}
-
-.page-heading p {
-  color: var(--muted);
-  margin: 0;
-  line-height: 1.5;
-}
-
-.eyebrow {
-  color: var(--purple-light);
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-/* PANELS */
-
-.panel {
-  background: linear-gradient(145deg, #171021, #100b19);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 24px;
-  margin-bottom: 22px;
-  box-shadow: 0 12px 35px #00000020;
-}
-
-.panel h2 {
-  color: #e5caff;
-  font-size: 19px;
-  margin: 0 0 18px;
-}
-
-.panel-description {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.6;
-  margin-top: -8px;
-  margin-bottom: 20px;
-}
-
-/* STATISTIQUES */
-
-.cards {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 17px;
-  margin-bottom: 25px;
-}
-
-.stat {
-  background: linear-gradient(145deg, #211630, #171020);
-  border: 1px solid #43295b;
-  border-radius: 14px;
-  padding: 22px;
-  position: relative;
-  overflow: hidden;
-}
-
-.stat::after {
-  content: "";
-  position: absolute;
-  width: 90px;
-  height: 90px;
-  background: #9333ea18;
-  border-radius: 50%;
-  right: -30px;
-  top: -30px;
-}
-
-.stat strong {
-  display: block;
-  font-size: 32px;
-  color: var(--purple-light);
-  margin-bottom: 7px;
-}
-
-.stat small {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-/* NAVIGATION */
-
-.quick-actions {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 15px;
-  margin-bottom: 27px;
-}
-
-.action-card {
-  display: flex;
-  align-items: center;
-  gap: 15px;
-  padding: 19px;
-  border-radius: 13px;
-  background: #171020;
-  border: 1px solid var(--border);
-  color: white;
-  text-decoration: none;
-  transition: .2s ease;
-}
-
-.action-card:hover {
-  border-color: var(--purple);
-  background: #21152f;
-  transform: translateY(-2px);
-}
-
-.action-icon {
-  width: 45px;
-  height: 45px;
-  display: grid;
-  place-items: center;
-  border-radius: 12px;
-  background: #9333ea25;
-  font-size: 22px;
-}
-
-.action-card strong {
-  display: block;
-  margin-bottom: 5px;
-}
-
-.action-card small {
-  color: var(--muted);
-  font-size: 12px;
-}
-
-/* FORMULAIRES */
-
-label {
-  display: block;
-  font-size: 13px;
-  color: #d9cce5;
-  margin: 12px 0 7px;
-}
-
-input, select {
-  width: 100%;
-  padding: 14px;
-  background: #090712;
-  color: white;
-  border: 1px solid #49335d;
-  border-radius: 9px;
-  outline: none;
-  transition: .2s;
-}
-
-input:focus, select:focus {
-  border-color: var(--purple-light);
-  box-shadow: 0 0 0 3px #9333ea22;
-}
-
-input::placeholder {
-  color: #766b80;
-}
-
-select option {
-  background: #151020;
-}
-
-/* TABLEAU */
-
-.table-wrap {
-  overflow-x: auto;
-  border-radius: 10px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  min-width: 550px;
-}
-
-th, td {
-  text-align: left;
-  padding: 15px 13px;
-  border-bottom: 1px solid var(--border);
-  font-size: 13px;
-}
-
-th {
-  color: var(--purple-light);
-  background: #211630;
-  font-size: 12px;
-  text-transform: uppercase;
-  letter-spacing: .5px;
-}
-
-td {
-  color: #ded7e7;
-}
-
-tbody tr:hover {
-  background: #ffffff08;
-}
-
-tbody tr:last-child td {
-  border-bottom: 0;
-}
-
-/* MESSAGES */
-
-#message, #loginMessage, #memberMessage {
-  margin-top: 15px;
-  color: var(--purple-light);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.empty {
-  color: var(--muted);
-}
-
-/* CONNEXION */
-
-#login {
-  max-width: 440px;
-  margin: 85px auto;
-  padding: 30px;
-}
-
-.login-logo {
-  text-align: center;
-  margin-bottom: 25px;
-}
-
-.login-logo .logo {
-  font-size: 25px;
-}
-
-.login-logo p {
-  color: var(--muted);
-  font-size: 13px;
-}
-
-#login button {
-  width: 100%;
-  margin-top: 10px;
-}
-
-#dashboard {
-  display: none;
-}
-
-/* PIED DE PAGE */
-
-footer {
-  text-align: center;
-  padding: 25px;
-  color: #746b7e;
-  font-size: 12px;
-  border-top: 1px solid var(--border);
-}
-
-/* MOBILE */
-
-@media(max-width: 700px) {
-  header {
-    padding: 14px 16px;
-  }
-
-  .logo {
-    font-size: 17px;
-  }
-
-  .admin-label {
-    display: none;
-  }
-
-  main {
-    padding: 25px 14px 45px;
-  }
-
-  .page-heading h1 {
-    font-size: 25px;
-  }
-
-  .cards {
-    grid-template-columns: 1fr;
-    gap: 11px;
-  }
-
-  .stat {
-    padding: 17px;
-  }
-
-  .stat strong {
-    font-size: 27px;
-  }
-
-  .quick-actions {
-    grid-template-columns: 1fr;
-  }
-
-  .panel {
-    padding: 18px;
-  }
-
-  #login {
-    margin: 55px 14px;
-    padding: 23px;
-  }
-
-  .logout {
-    padding: 10px 12px;
-    font-size: 12px;
-  }
+.message-row.mine .message-bubble{background:#7133a5;border-color:#9853ca;border-radius:14px 14px 3px 14px}
+.message-time{font-size:10px;color:#aaa;margin:5px 6px 0}
+.chat-form{display:flex;gap:10px;padding:15px;border-top:1px solid var(--border);background:#120d1d}
+.chat-form input{flex:1;min-width:0;margin:0}
+.chat-form button{white-space:nowrap}
+.chat-status{font-size:12px;color:#c084fc;padding:0 17px 12px;background:#120d1d}
+.no-creator{padding:20px;text-align:center;color:var(--muted);font-size:13px}
+@media(max-width:700px){
+ header{padding:14px 16px}.logo{font-size:17px}.admin-label{display:none}
+ main{padding:25px 14px 45px}.page-heading h1{font-size:25px}
+ .cards{grid-template-columns:1fr;gap:11px}.stat{padding:17px}
+ .stat strong{font-size:27px}.quick-actions{grid-template-columns:1fr}
+ .panel{padding:18px}#login{margin:55px 14px;padding:23px}
+ .logout{padding:10px 12px;font-size:12px}
+ .messages-layout{grid-template-columns:1fr}
+ .creator-list{border-right:0;border-bottom:1px solid var(--border)}
+ .creator-items{max-height:220px}
+ .chat-messages{height:50vh;min-height:280px}
+ .message-row{max-width:90%}
+ .chat-form{gap:7px;padding:10px}
+ .chat-form input{padding:12px}
+ .chat-form button{padding:12px}
 }
 </style>
 </head>
 
 <body>
-
 <header>
-  <div class="logo">JOJO <span>STUDIO LIVE</span></div>
-
-  <div class="header-right">
-    <span class="admin-label">ESPACE FONDATEUR</span>
-    <button id="logoutButton" class="logout"
-      style="display:none">Déconnexion</button>
-  </div>
+ <div class="logo">JOJO <span>STUDIO LIVE</span></div>
+ <div class="header-right">
+  <span class="admin-label">ESPACE FONDATEUR</span>
+  <button id="logoutButton" class="logout" style="display:none">Déconnexion</button>
+ </div>
 </header>
 
-<!-- CONNEXION -->
-
 <div id="login" class="panel">
-
-  <div class="login-logo">
-    <div class="logo">JOJO <span style="color:#c084fc">STUDIO LIVE</span></div>
-    <p>Administration sécurisée de l'agence</p>
-  </div>
-
-  <h2>Connexion Fondateur</h2>
-
-  <form id="loginForm">
-    <label for="email">Adresse e-mail</label>
-    <input id="email" type="email" placeholder="Ton adresse e-mail" required>
-
-    <label for="password">Mot de passe</label>
-    <input id="password" type="password" placeholder="Ton mot de passe" required>
-
-    <button type="submit">Se connecter →</button>
-  </form>
-
-  <div id="loginMessage"></div>
+ <div class="login-logo">
+  <div class="logo">JOJO <span style="color:#c084fc">STUDIO LIVE</span></div>
+  <p>Administration sécurisée de l'agence</p>
+ </div>
+ <h2>Connexion Fondateur</h2>
+ <form id="loginForm">
+  <label for="email">Adresse e-mail</label>
+  <input id="email" type="email" placeholder="Ton adresse e-mail" required>
+  <label for="password">Mot de passe</label>
+  <input id="password" type="password" placeholder="Ton mot de passe" required>
+  <button type="submit">Se connecter →</button>
+ </form>
+ <div id="loginMessage"></div>
 </div>
 
-<!-- TABLEAU DE BORD -->
-
 <main id="dashboard">
+ <div class="page-heading">
+  <div class="eyebrow">Espace de gestion</div>
+  <h1>Tableau de bord</h1>
+  <p id="welcome">Bienvenue dans ton espace d'administration.</p>
+ </div>
 
-  <div class="page-heading">
-    <div class="eyebrow">Espace de gestion</div>
-    <h1>Tableau de bord</h1>
-    <p id="welcome">Bienvenue dans ton espace d'administration.</p>
+ <div class="cards">
+  <div class="stat"><strong id="totalMembers">0</strong><small>Membres de l'agence</small></div>
+  <div class="stat"><strong id="totalCreators">0</strong><small>Créateurs TikTok</small></div>
+  <div class="stat"><strong id="totalStaff">0</strong><small>Équipe interne</small></div>
+ </div>
+
+ <div class="quick-actions">
+  <a href="gestion-stats.html" class="action-card">
+   <div class="action-icon">📊</div>
+   <div><strong>Gestion des statistiques</strong><small>Suivre les performances des créateurs</small></div>
+  </a>
+  <a href="createur.html" class="action-card">
+   <div class="action-icon">👤</div>
+   <div><strong>Espace créateur</strong><small>Accéder à l'espace des créateurs</small></div>
+  </a>
+ </div>
+
+ <section class="panel">
+  <h2>＋ Ajouter un membre</h2>
+  <p class="panel-description">Crée d'abord son compte dans Firebase Authentication, puis renseigne son UID pour enregistrer son profil dans l'agence.</p>
+  <form id="memberForm">
+   <label for="memberName">Nom et prénom</label>
+   <input id="memberName" required placeholder="Nom du membre">
+   <label for="memberEmail">Adresse e-mail</label>
+   <input id="memberEmail" type="email" required placeholder="membre@email.fr">
+   <label for="memberUid">UID Firebase Authentication</label>
+   <input id="memberUid" required placeholder="UID du compte Firebase">
+   <label for="memberRole">Rôle dans l'agence</label>
+   <select id="memberRole" required>
+    <option value="createur">Créateur</option>
+    <option value="moderateur">Modérateur</option>
+    <option value="recruteur">Recruteur</option>
+    <option value="responsable">Responsable</option>
+   </select>
+   <button type="submit">Enregistrer le membre</button>
+  </form>
+  <div id="memberMessage"></div>
+ </section>
+
+ <section class="panel">
+  <h2>Notre équipe</h2>
+  <p class="panel-description">Retrouvez ici les membres enregistrés dans Jojo Studio Live.</p>
+  <div class="table-wrap">
+   <table>
+    <thead><tr><th>Nom</th><th>E-mail</th><th>Rôle</th><th>UID Firebase</th></tr></thead>
+    <tbody id="membersList"><tr><td colspan="4">Chargement des membres...</td></tr></tbody>
+   </table>
   </div>
+ </section>
 
-  <!-- STATISTIQUES -->
+ <!-- MESSAGERIE FONDATEUR -->
+ <section class="panel" id="founderMessaging">
+  <h2>💬 Messagerie des créateurs</h2>
+  <p class="panel-description">Sélectionne un créateur pour lire ses messages et lui répondre en privé.</p>
 
-  <div class="cards">
+  <div class="messages-layout">
+   <aside class="creator-list">
+    <div class="creator-list-header">
+     <h3>Mes créateurs</h3>
+     <input id="creatorSearch" type="search" placeholder="Rechercher un créateur...">
+    </div>
+    <div id="creatorItems" class="creator-items">
+     <div class="no-creator">Chargement des créateurs...</div>
+    </div>
+   </aside>
 
-    <div class="stat">
-      <strong id="totalMembers">0</strong>
-      <small>Membres de l'agence</small>
+   <div class="chat-area">
+    <div class="chat-header">
+     <h3 id="chatCreatorName">Aucune conversation sélectionnée</h3>
+     <p id="chatCreatorEmail">Choisis un créateur dans la liste.</p>
     </div>
 
-    <div class="stat">
-      <strong id="totalCreators">0</strong>
-      <small>Créateurs TikTok</small>
+    <div id="chatMessages" class="chat-messages">
+     <div class="chat-empty">Sélectionne un créateur pour afficher la conversation.</div>
     </div>
 
-    <div class="stat">
-      <strong id="totalStaff">0</strong>
-      <small>Équipe interne</small>
-    </div>
+    <div class="chat-status" id="chatStatus">Messagerie fondateur</div>
 
-  </div>
-
-  <!-- ACCÈS RAPIDES -->
-
-  <div class="quick-actions">
-
-    <a href="gestion-stats.html" class="action-card">
-      <div class="action-icon">📊</div>
-      <div>
-        <strong>Gestion des statistiques</strong>
-        <small>Suivre les performances des créateurs</small>
-      </div>
-    </a>
-
-    <a href="createur.html" class="action-card">
-      <div class="action-icon">👤</div>
-      <div>
-        <strong>Espace créateur</strong>
-        <small>Accéder à l'espace des créateurs</small>
-      </div>
-    </a>
-
-  </div>
-
-  <!-- AJOUT MEMBRE -->
-
-  <section class="panel">
-
-    <h2>＋ Ajouter un membre</h2>
-
-    <p class="panel-description">
-      Crée d'abord son compte dans Firebase Authentication,
-      puis renseigne son UID pour enregistrer son profil dans l'agence.
-    </p>
-
-    <form id="memberForm">
-
-      <label for="memberName">Nom et prénom</label>
-      <input id="memberName" required placeholder="Nom du membre">
-
-      <label for="memberEmail">Adresse e-mail</label>
-      <input id="memberEmail" type="email" required placeholder="membre@email.fr">
-
-      <label for="memberUid">UID Firebase Authentication</label>
-      <input id="memberUid" required placeholder="UID du compte Firebase">
-
-      <label for="memberRole">Rôle dans l'agence</label>
-      <select id="memberRole" required>
-        <option value="createur">Créateur</option>
-        <option value="moderateur">Modérateur</option>
-        <option value="recruteur">Recruteur</option>
-        <option value="responsable">Responsable</option>
-      </select>
-
-      <button type="submit">Enregistrer le membre</button>
-
+    <form id="chatForm" class="chat-form">
+     <input id="chatInput" type="text" maxlength="2000" placeholder="Sélectionne un créateur..." disabled required>
+     <button id="sendButton" type="submit" disabled>Envoyer</button>
     </form>
-
-    <div id="memberMessage"></div>
-
-  </section>
-
-  <!-- ÉQUIPE -->
-
-  <section class="panel">
-
-    <h2>Notre équipe</h2>
-
-    <p class="panel-description">
-      Retrouvez ici les membres enregistrés dans Jojo Studio Live.
-    </p>
-
-    <div class="table-wrap">
-      <table>
-        <thead>
-          <tr>
-            <th>Nom</th>
-            <th>E-mail</th>
-            <th>Rôle</th>
-            <th>UID Firebase</th>
-          </tr>
-        </thead>
-
-        <tbody id="membersList">
-          <tr>
-            <td colspan="4">Chargement des membres...</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-
-  </section>
-
+   </div>
+  </div>
+  <div id="chatError" class="status-message"></div>
+ </section>
 </main>
 
-<footer>
-  JOJO STUDIO LIVE © 2026 — Espace d'administration
-</footer>
+<footer>JOJO STUDIO LIVE © 2026 — Espace d'administration</footer>
 
 <script type="module">
-
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+import {initializeApp,getApps,getApp}
+from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
 
 import {
-  getAuth,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged
+ getAuth,signInWithEmailAndPassword,signOut,onAuthStateChanged
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
 
 import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  getDocs,
-  collection,
-  serverTimestamp
+ getFirestore,doc,getDoc,setDoc,getDocs,collection,
+ serverTimestamp,addDoc,query,orderBy,onSnapshot
 } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
 
-const firebaseConfig = {
-  apiKey: "AIzaSyAXtgoUM86NRVQQSQrQC9VNH22EXiKoDPo",
-  authDomain: "jojo-studio-live-7ac91.firebaseapp.com",
-  databaseURL: "https://jojo-studio-live-7ac91-default-rtdb.europe-west1.firebasedatabase.app",
-  projectId: "jojo-studio-live-7ac91",
-  storageBucket: "jojo-studio-live-7ac91.firebasestorage.app",
-  messagingSenderId: "881225433382",
-  appId: "1:881225433382:web:112ccc2dceece58c8641e7",
-  measurementId: "G-2XH20R9VBS"
+const firebaseConfig={
+ apiKey:"AIzaSyAXtgoUM86NRVQQSQrQC9VNH22EXiKoPo",
+ authDomain:"jojo-studio-live-7ac91.firebaseapp.com",
+ databaseURL:"https://jojo-studio-live-7ac91-default-rtdb.europe-west1.firebasedatabase.app",
+ projectId:"jojo-studio-live-7ac91",
+ storageBucket:"jojo-studio-live-7ac91.firebasestorage.app",
+ messagingSenderId:"881225433382",
+ appId:"1:881225433382:web:112ccc2dceece58c8641e7",
+ measurementId:"G-2XH20R9VBS"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=getApps().length?getApp():initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-const login = document.getElementById("login");
-const dashboard = document.getElementById("dashboard");
-const logoutButton = document.getElementById("logoutButton");
+const login=document.getElementById("login");
+const dashboard=document.getElementById("dashboard");
+const logoutButton=document.getElementById("logoutButton");
+const creatorItems=document.getElementById("creatorItems");
+const chatMessages=document.getElementById("chatMessages");
+const chatInput=document.getElementById("chatInput");
+const sendButton=document.getElementById("sendButton");
+const chatForm=document.getElementById("chatForm");
 
-function showMessage(id, text) {
-  document.getElementById(id).textContent = text;
+let creators=[];
+let selectedCreator=null;
+let unsubscribeMessages=null;
+let isSending=false;
+
+function showMessage(id,text){
+ document.getElementById(id).textContent=text;
 }
 
-async function loadMembers() {
+function stopConversation(){
+ if(unsubscribeMessages){
+  unsubscribeMessages();
+  unsubscribeMessages=null;
+ }
+}
 
-  const snapshot = await getDocs(collection(db, "users"));
-  const list = document.getElementById("membersList");
+async function loadMembers(){
+ const snapshot=await getDocs(collection(db,"users"));
+ const list=document.getElementById("membersList");
+ list.replaceChildren();
 
-  list.replaceChildren();
+ let creatorsCount=0;
+ let staff=0;
 
-  let creators = 0;
-  let staff = 0;
+ snapshot.forEach(item=>{
+  const member=item.data();
+  if(member.role==="createur")creatorsCount++;
+  else if(member.role!=="fondateur")staff++;
 
-  snapshot.forEach(item => {
+  const tr=document.createElement("tr");
+  [
+   member.name||"Sans nom",
+   member.email||"",
+   member.role||"",
+   item.id
+  ].forEach(value=>{
+   const td=document.createElement("td");
+   td.textContent=value;
+   tr.appendChild(td);
+  });
+  list.appendChild(tr);
+ });
 
-    const member = item.data();
+ if(snapshot.empty){
+  const tr=document.createElement("tr");
+  const td=document.createElement("td");
+  td.colSpan=4;
+  td.textContent="Aucun membre enregistré.";
+  tr.appendChild(td);
+  list.appendChild(tr);
+ }
 
-    if (member.role === "createur") creators++;
-    else staff++;
+ document.getElementById("totalMembers").textContent=snapshot.size;
+ document.getElementById("totalCreators").textContent=creatorsCount;
+ document.getElementById("totalStaff").textContent=staff;
+}
 
-    const tr = document.createElement("tr");
+async function loadCreators(){
+ creatorItems.innerHTML='<div class="no-creator">Chargement des créateurs...</div>';
 
-    [
-      member.name || "Sans nom",
-      member.email || "",
-      member.role || "",
-      item.id
-    ].forEach(value => {
+ try{
+  const snapshot=await getDocs(collection(db,"users"));
+  creators=[];
 
-      const td = document.createElement("td");
-      td.textContent = value;
-      tr.appendChild(td);
-
+  snapshot.forEach(item=>{
+   const data=item.data();
+   if(data.role==="createur"){
+    creators.push({
+     uid:item.id,
+     name:data.name||"Créateur sans nom",
+     email:data.email||"Adresse e-mail non renseignée",
+     tiktok:data.tiktok||""
     });
-
-    list.appendChild(tr);
-
+   }
   });
 
-  if (snapshot.empty) {
+  creators.sort((a,b)=>a.name.localeCompare(b.name,"fr"));
+  renderCreators(creators);
 
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-
-    td.colSpan = 4;
-    td.textContent = "Aucun membre enregistré.";
-
-    tr.appendChild(td);
-    list.appendChild(tr);
-
-  }
-
-  document.getElementById("totalMembers").textContent = snapshot.size;
-  document.getElementById("totalCreators").textContent = creators;
-  document.getElementById("totalStaff").textContent = staff;
-
+ }catch(error){
+  console.error(error);
+  creatorItems.innerHTML='<div class="no-creator">Impossible de charger les créateurs. Vérifie les règles Firestore.</div>';
+ }
 }
 
-onAuthStateChanged(auth, async user => {
+function renderCreators(list){
+ creatorItems.replaceChildren();
 
-  if (!user) {
+ if(!list.length){
+  creatorItems.innerHTML='<div class="no-creator">Aucun créateur trouvé.</div>';
+  return;
+ }
 
-    login.style.display = "block";
-    dashboard.style.display = "none";
-    logoutButton.style.display = "none";
-    return;
+ list.forEach(creator=>{
+  const button=document.createElement("button");
+  button.type="button";
+  button.className="creator-item"+(selectedCreator?.uid===creator.uid?" selected":"");
 
-  }
+  const name=document.createElement("strong");
+  name.textContent=creator.name;
 
-  try {
+  const email=document.createElement("small");
+  email.textContent=creator.email;
 
-    const profile = await getDoc(doc(db, "users", user.uid));
+  const role=document.createElement("small");
+  role.className="creator-role";
+  role.textContent=creator.tiktok?"TikTok : "+creator.tiktok:"Créateur Jojo Studio Live";
 
-    if (!profile.exists() || profile.data().role !== "fondateur") {
+  button.append(name,email,role);
+  button.addEventListener("click",()=>openConversation(creator));
+  creatorItems.appendChild(button);
+ });
+}
 
-      await signOut(auth);
-      showMessage("loginMessage", "Accès réservé au Fondateur.");
-      return;
+async function openConversation(creator){
+ stopConversation();
+ selectedCreator=creator;
 
-    }
+ renderCreators(creators.filter(c=>{
+  const search=document.getElementById("creatorSearch").value.toLowerCase();
+  return c.name.toLowerCase().includes(search)||c.email.toLowerCase().includes(search);
+ }));
 
-    login.style.display = "none";
-    dashboard.style.display = "block";
-    logoutButton.style.display = "inline-flex";
+ document.getElementById("chatCreatorName").textContent=creator.name;
+ document.getElementById("chatCreatorEmail").textContent=creator.email;
+ document.getElementById("chatError").textContent="";
+ chatInput.disabled=false;
+ sendButton.disabled=false;
+ chatInput.placeholder="Écris ton message au créateur...";
+ chatMessages.innerHTML='<div class="chat-empty">Chargement de la conversation...</div>';
+ document.getElementById("chatStatus").textContent="Ouverture de la conversation...";
 
-    document.getElementById("welcome").textContent =
-      "Bienvenue, " + (profile.data().name || user.email) +
-      ". Voici l'activité de ton agence.";
+ try{
+  const conversationRef=doc(db,"conversations",creator.uid);
 
-    await loadMembers();
+  await setDoc(conversationRef,{
+   creatorId:creator.uid,
+   creatorName:creator.name,
+   creatorEmail:creator.email,
+   updatedAt:serverTimestamp()
+  },{merge:true});
 
-  } catch (error) {
+  const messagesRef=collection(conversationRef,"messages");
+  const messagesQuery=query(messagesRef,orderBy("createdAt","asc"));
 
-    showMessage("loginMessage", "Erreur : " + error.message);
+  unsubscribeMessages=onSnapshot(messagesQuery,snapshot=>{
+   chatMessages.replaceChildren();
 
-  }
+   if(snapshot.empty){
+    const empty=document.createElement("div");
+    empty.className="chat-empty";
+    empty.textContent="Aucun message pour le moment. Tu peux envoyer le premier message à ce créateur.";
+    chatMessages.appendChild(empty);
+   }else{
+    snapshot.forEach(messageDoc=>{
+     const data=messageDoc.data();
+     const mine=data.senderId===auth.currentUser?.uid;
 
-});
+     const row=document.createElement("div");
+     row.className="message-row"+(mine?" mine":"");
 
-document.getElementById("loginForm").addEventListener("submit", async e => {
+     const author=document.createElement("div");
+     author.className="message-author";
+     author.textContent=mine?"Toi — Fondateur":creator.name;
 
-  e.preventDefault();
+     const bubble=document.createElement("div");
+     bubble.className="message-bubble";
+     bubble.textContent=data.text||"";
 
-  showMessage("loginMessage", "Connexion en cours...");
+     const time=document.createElement("div");
+     time.className="message-time";
 
-  try {
+     if(data.createdAt?.toDate){
+      time.textContent=data.createdAt.toDate().toLocaleString("fr-FR",{
+       day:"2-digit",month:"2-digit",year:"numeric",
+       hour:"2-digit",minute:"2-digit"
+      });
+     }else{
+      time.textContent="Envoi en cours...";
+     }
 
-    await signInWithEmailAndPassword(
-      auth,
-      document.getElementById("email").value.trim(),
-      document.getElementById("password").value
-    );
-
-  } catch (error) {
-
-    showMessage("loginMessage", "Connexion impossible : " + error.message);
-
-  }
-
-});
-
-logoutButton.addEventListener("click", () => signOut(auth));
-
-document.getElementById("memberForm").addEventListener("submit", async e => {
-
-  e.preventDefault();
-
-  showMessage("memberMessage", "Enregistrement en cours...");
-
-  const user = auth.currentUser;
-
-  if (!user) {
-    showMessage("memberMessage", "Tu dois être connecté.");
-    return;
-  }
-
-  try {
-
-    const founder = await getDoc(doc(db, "users", user.uid));
-
-    if (!founder.exists() || founder.data().role !== "fondateur") {
-      throw new Error("Autorisation refusée.");
-    }
-
-    const uid = document.getElementById("memberUid").value.trim();
-    const name = document.getElementById("memberName").value.trim();
-    const email = document.getElementById("memberEmail").value.trim();
-    const role = document.getElementById("memberRole").value;
-
-    if (uid === user.uid) {
-      throw new Error("Tu ne peux pas remplacer ton propre profil.");
-    }
-
-    const existing = await getDoc(doc(db, "users", uid));
-
-    if (existing.exists()) {
-      throw new Error("Un profil existe déjà pour cet UID.");
-    }
-
-    await setDoc(doc(db, "users", uid), {
-      name,
-      email,
-      role,
-      createdAt: serverTimestamp()
+     row.append(author,bubble,time);
+     chatMessages.appendChild(row);
     });
+   }
 
-    document.getElementById("memberForm").reset();
+   chatMessages.scrollTop=chatMessages.scrollHeight;
+   document.getElementById("chatStatus").textContent="Conversation synchronisée en direct";
+  },error=>{
+   console.error(error);
+   showMessage("chatError","Erreur de lecture : "+error.message);
+   document.getElementById("chatStatus").textContent="Erreur de messagerie";
+  });
 
-    showMessage("memberMessage", "Membre ajouté avec succès !");
+ }catch(error){
+  console.error(error);
+  showMessage("chatError","Impossible d'ouvrir la conversation : "+error.message);
+  chatMessages.innerHTML='<div class="chat-empty">Vérifie les règles Firestore et réessaie.</div>';
+ }
+}
 
-    await loadMembers();
+chatForm.addEventListener("submit",async event=>{
+ event.preventDefault();
 
-  } catch (error) {
+ const text=chatInput.value.trim();
+ const user=auth.currentUser;
 
-    showMessage("memberMessage", "Erreur : " + error.message);
+ if(!text||!user||!selectedCreator||isSending)return;
 
-  }
+ isSending=true;
+ sendButton.disabled=true;
+ document.getElementById("chatStatus").textContent="Envoi du message...";
 
+ try{
+  const conversationRef=doc(db,"conversations",selectedCreator.uid);
+  const messagesRef=collection(conversationRef,"messages");
+
+  await addDoc(messagesRef,{
+   text,
+   senderId:user.uid,
+   senderName:"Fondateur",
+   senderRole:"fondateur",
+   createdAt:serverTimestamp()
+  });
+
+  await setDoc(conversationRef,{
+   creatorId:selectedCreator.uid,
+   creatorName:selectedCreator.name,
+   creatorEmail:selectedCreator.email,
+   updatedAt:serverTimestamp(),
+   lastMessage:text
+  },{merge:true});
+
+  chatInput.value="";
+  document.getElementById("chatStatus").textContent="Message envoyé";
+ }catch(error){
+  console.error(error);
+  showMessage("chatError","Envoi impossible : "+error.message);
+  document.getElementById("chatStatus").textContent="Erreur d'envoi";
+ }
+
+ isSending=false;
+ sendButton.disabled=!selectedCreator;
+ chatInput.focus();
 });
 
-</script>
+document.getElementById("creatorSearch").addEventListener("input",event=>{
+ const search=event.target.value.toLowerCase();
+ const filtered=creators.filter(c=>
+  c.name.toLowerCase().includes(search)||
+  c.email.toLowerCase().includes(search)
+ );
+ renderCreators(filtered);
+});
 
+onAuthStateChanged(auth,async user=>{
+ stopConversation();
+ selectedCreator=null;
+
+ if(!user){
+  login.style.display="block";
+  dashboard.style.display="none";
+  logoutButton.style.display="none";
+  return;
+ }
+
+ try{
+  const profile=await getDoc(doc(db,"users",user.uid));
+
+  if(!profile.exists()||profile.data().role!=="fondateur"){
+   await signOut(auth);
+   showMessage("loginMessage","Accès réservé au Fondateur.");
+   return;
+  }
+
+  login.style.display="none";
+  dashboard.style.display="block";
+  logoutButton.style.display="inline-flex";
+
+  document.getElementById("welcome").textContent=
+   "Bienvenue, "+(profile.data().name||user.email)+". Voici l'activité de ton agence.";
+
+  await loadMembers();
+  await loadCreators();
+
+ }catch(error){
+  console.error(error);
+  showMessage("loginMessage","Erreur : "+error.message);
+ }
+});
+
+document.getElementById("loginForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ showMessage("loginMessage","Connexion en cours...");
+
+ try{
+  await signInWithEmailAndPassword(
+   auth,
+   document.getElementById("email").value.trim(),
+   document.getElementById("password").value
+  );
+ }catch(error){
+  showMessage("loginMessage","Connexion impossible : "+error.message);
+ }
+});
+
+logoutButton.addEventListener("click",async()=>{
+ stopConversation();
+ await signOut(auth);
+});
+
+document.getElementById("memberForm").addEventListener("submit",async event=>{
+ event.preventDefault();
+ showMessage("memberMessage","Enregistrement en cours...");
+
+ const user=auth.currentUser;
+ if(!user){
+  showMessage("memberMessage","Tu dois être connecté.");
+  return;
+ }
+
+ try{
+  const founder=await getDoc(doc(db,"users",user.uid));
+  if(!founder.exists()||founder.data().role!=="fondateur"){
+   throw new Error("Autorisation refusée.");
+  }
+
+  const uid=document.getElementById("memberUid").value.trim();
+  const name=document.getElementById("memberName").value.trim();
+  const email=document.getElementById("memberEmail").value.trim();
+  const role=document.getElementById("memberRole").value;
+
+  if(uid===user.uid)throw new Error("Tu ne peux pas remplacer ton propre profil.");
+
+  const existing=await getDoc(doc(db,"users",uid));
+  if(existing.exists())throw new Error("Un profil existe déjà pour cet UID.");
+
+  await setDoc(doc(db,"users",uid),{
+   name,email,role,createdAt:serverTimestamp()
+  });
+
+  document.getElementById("memberForm").reset();
+  showMessage("memberMessage","Membre ajouté avec succès !");
+
+  await loadMembers();
+  await loadCreators();
+
+ }catch(error){
+  console.error(error);
+  showMessage("memberMessage","Erreur : "+error.message);
+ }
+});
+</script>
 </body>
 </html>
